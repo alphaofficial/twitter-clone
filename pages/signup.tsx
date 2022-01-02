@@ -1,11 +1,11 @@
 import { Box, Text } from "@chakra-ui/layout";
 
-const Home = () => {
+const Signup = () => {
   return (
     <Box>
-      <Text>Home</Text>
+      <Text>Sign Up</Text>
     </Box>
   );
 };
 
-export default Home;
+export default Signup;
