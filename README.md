@@ -1,34 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Twitter clone
+
+A fullstack clone of [twitter](https://twitter.com)
 
 ## Getting Started
 
-First, run the development server:
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+Before we get started, we're going to need to make sure we have a few things installed and available on our machine.
+
+#### Node >= 12
+
+##### MacOS
 
 ```bash
-npm run dev
-# or
+curl "https://nodejs.org/dist/latest/node-${VERSION:-$(wget -qO- https://nodejs.org/dist/latest/ | sed -nE 's|.*>node-(.*)\.pkg</a>.*|\1|p')}.pkg" > "$HOME/Downloads/node-latest.pkg" && sudo installer -store -pkg "$HOME/Downloads/node-latest.pkg" -target "/"
+```
+
+##### Other
+
+See the installation guides available @ nodejs.org:
+
+https://nodejs.org/en/download/package-manager/
+
+#### Yarn
+
+```bash
+npm i -g yarn
+```
+
+### Installing
+
+Below is a series of step by step instructions that tell you how to get a development env running.
+
+Create a local clone of the repository
+
+Enter the cloned repositories' directory
+
+Install the projects dependencies
+
+```bash
+yarn
+```
+
+Create a `.env` file based on the [.env.example template](.env.example)
+
+Export the contents of the created `.env` file to the current terminal session.
+
+```bash
+set -o allexport; source .env; set +o allexport
+```
+
+Start the projects development server
+
+```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The project should now be available at http://localhost:4800
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Technologies used
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Next JS (React)
+- Prisma
+- Chakra UI
