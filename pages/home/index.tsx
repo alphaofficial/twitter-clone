@@ -1,10 +1,13 @@
 import { Box, Text } from "@chakra-ui/layout";
+import PageLayout from "../../components/pageLayout";
 
 const Home = () => {
   return (
-    <Box>
-      <Text>Home</Text>
-    </Box>
+    <PageLayout>
+      <Box>
+        <Text>Feed</Text>
+      </Box>
+    </PageLayout>
   );
 };
 
