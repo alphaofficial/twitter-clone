@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  email       String     @unique
+  password    String
+  username    String     @unique
+  firstName   String?
+  lastName    String?
+  followedBy  User[]     @relation("UserToUser")
+  User        User?      @relation("UserToUser", fields: [userId], references: [id])
+  userId      Int?
+  Following   Following? @relation(fields: [followingId], references: [id])
+  followingId Int?
+  Likes       Likes?     @relation(fields: [likesId], references: [id])
+  likesId     Int?
+  Retweets    Retweets?  @relation(fields: [retweetsId], references: [id])
+  retweetsId  Int?
+  Tweet       Tweet[]
+}
+
+model Following {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  users     User[]
+}
+
+model Tweet {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
+  likes     Int
+  retweets  Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Likes {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tweetId   Int
+  users     User[]
+}
+
+model Retweets {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tweetId   Int
+  users     User[]
+}
