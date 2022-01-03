@@ -1,6 +1,8 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "reset-css";
 import "simplebar/dist/simplebar.min.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "../styles/date-picker.css";
 
 const theme = extendTheme({
   components: {

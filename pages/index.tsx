@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   Box,
   Flex,
@@ -6,17 +7,35 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  ModalBody,
+  ModalOverlay,
+  Modal,
+  ModalContent,
+  useDisclosure,
+  IconButton,
+  Image,
+  Input,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+} from "@chakra-ui/react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import SimpleBar from "simplebar-react";
+import { IoMdClose } from "react-icons/io";
+import DatePicker from "react-datepicker";
+import { useState } from "react";
 
 const Home = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [dob, setDob] = useState(new Date());
   return (
     <SimpleBar>
       <Box bg="black" minHeight="100vh" width="100vw" color="white">
         <Flex justifyContent="space-between" height="100%">
-          <Box bg="blue.400" width="55%" minHeight="100vh" padding="20px">
+          <Box bg="twitter.600" width="55%" minHeight="100vh" padding="20px">
             <Flex justifyContent="center" height="100%" alignItems="center">
               <Box>
                 <NextImage src="/twitter.png" height={200} width={200} />
@@ -77,13 +96,15 @@ const Home = () => {
                   width="100%"
                   sx={{
                     "&:hover": {
-                      bg: "blue.500",
+                      bg: "twitter.700",
                     },
                   }}
-                  bg="blue.400"
+                  bg="twitter.600"
                   rounded="full"
+                  fontWeight="bold"
+                  onClick={onOpen}
                 >
-                  <Text fontWeight="bold">Sign up with phone or email</Text>
+                  Sign up with phone or email
                 </Button>
                 <Box>
                   <Text color="gray.600" fontSize="small">
@@ -113,7 +134,7 @@ const Home = () => {
                         border="1px solid"
                         borderColor="gray.700"
                         rounded="full"
-                        color="blue.500"
+                        color="twitter.600"
                         fontWeight="bold"
                       >
                         Sign in
@@ -126,6 +147,87 @@ const Home = () => {
           </Box>
         </Flex>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay bg="rgba(91, 112, 131, 0.4);" />
+        <ModalContent bg="black" color="white" paddingBottom="40px">
+          <Box position="relative">
+            <Box paddingLeft="4px">
+              <IconButton
+                aria-label="close-modal-button"
+                variant="ghost"
+                sx={{
+                  "&:hover": {
+                    bg: "transparent",
+                  },
+                }}
+                onClick={onClose}
+              >
+                <IoMdClose size={30} />
+              </IconButton>
+            </Box>
+            <Box position="absolute" left="48%" top="10px">
+              <Image src="/twitter.png" width={30} height={30} />
+            </Box>
+          </Box>
+
+          <ModalBody>
+            <Box>
+              <Box marginTop="20px">
+                <Text fontSize="xl" fontWeight="bold">
+                  Create your account
+                </Text>
+              </Box>
+              <Box marginTop="20px">
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    marginTop="20px"
+                    size="lg"
+                  />
+                </FormControl>
+                <FormControl marginTop="20px">
+                  <Input
+                    type="text"
+                    placeholder="Email"
+                    marginTop="20px"
+                    size="lg"
+                  />
+                </FormControl>
+                <FormControl marginTop="20px">
+                  <FormLabel htmlFor="dob">Date of birth</FormLabel>
+                  <FormHelperText marginBottom="10px">
+                    This will not be shown publicly. Confirm your own age, even
+                    if this account is for a business, a pet, or something else.
+                  </FormHelperText>
+                  <DatePicker
+                    id="dob"
+                    selected={dob}
+                    onChange={(date) => setDob(date)}
+                    showPopperArrow={false}
+                    className="react-datapicker__input-text"
+                  />
+                </FormControl>
+              </Box>
+              <Box marginTop="40px">
+                <Button
+                  bg="twitter.600"
+                  sx={{
+                    "&:hover": {
+                      bg: "twitter.700",
+                    },
+                  }}
+                  rounded="full"
+                  width="100%"
+                  //disabled
+                >
+                  Next
+                </Button>
+              </Box>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </SimpleBar>
   );
 };
