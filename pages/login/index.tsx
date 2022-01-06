@@ -16,6 +16,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import SimpleBar from "simplebar-react";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
@@ -28,12 +29,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
     await auth("login", { email, password });
     setIsLoading(false);
+    router.push("/home");
   };
 
   const renderPasswordIcon = (visible: boolean) => {
