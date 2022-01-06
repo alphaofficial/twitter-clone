@@ -18,298 +18,135 @@ import {
   Image,
   Input,
   FormControl,
-  FormLabel,
   FormHelperText,
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import SimpleBar from "simplebar-react";
 import { IoMdClose } from "react-icons/io";
-import DatePicker from "react-datepicker";
-import { useState } from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { auth } from "../lib/mutations";
 
-const StepOne = ({ dob, setDob, handleSetStep }) => {
-  return (
-    <Box>
-      <Box marginTop="20px">
-        <Text fontSize="xl" fontWeight="bold">
-          Create your account
-        </Text>
-      </Box>
-      <Box marginTop="20px">
-        <FormControl>
-          <Input type="text" placeholder="Name" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <Input type="text" placeholder="Email" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <FormLabel htmlFor="dob">Date of birth</FormLabel>
-          <FormHelperText marginBottom="10px">
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </FormHelperText>
-          <DatePicker
-            id="dob"
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            showPopperArrow={false}
-            className="react-datapicker__input-text"
-          />
-        </FormControl>
-      </Box>
-      <Box marginTop="40px">
-        <Button
-          bg="twitter.600"
-          sx={{
-            "&:hover": {
-              bg: "twitter.700",
-            },
-          }}
-          rounded="full"
-          width="100%"
-          onClick={() => handleSetStep(2)}
-        >
-          Next
-        </Button>
-      </Box>
-    </Box>
-  );
+type InitialValues = {
+  email: string;
+  password: string;
+  username: string;
 };
-const StepTwo = ({ dob, setDob, handleSetStep }) => {
-  return (
-    <Box>
-      <Box marginTop="20px">
-        <Text fontSize="xl" fontWeight="bold">
-          Create your account
-        </Text>
-      </Box>
-      <Box marginTop="20px">
-        <FormControl>
-          <Input type="text" placeholder="Name" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <Input type="text" placeholder="Email" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <FormLabel htmlFor="dob">Date of birth</FormLabel>
-          <FormHelperText marginBottom="10px">
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </FormHelperText>
-          <DatePicker
-            id="dob"
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            showPopperArrow={false}
-            className="react-datapicker__input-text"
-          />
-        </FormControl>
-      </Box>
-      <Box marginTop="40px">
-        <Button
-          bg="twitter.600"
-          sx={{
-            "&:hover": {
-              bg: "twitter.700",
-            },
-          }}
-          rounded="full"
-          width="100%"
-          onClick={() => handleSetStep(3)}
-        >
-          Next
-        </Button>
-      </Box>
-    </Box>
-  );
+
+const initialValues: InitialValues = {
+  email: "",
+  password: "",
+  username: "",
 };
-const StepThree = ({ dob, setDob, handleSetStep }) => {
+
+const FormValidation = Yup.object().shape({
+  email: Yup.string().required("email is required").email("Invalid email"),
+  password: Yup.string()
+    .required("email is required")
+    .min(6, "Password is too short - should be 6 chars minimum.")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$/,
+      "At least one uppercase letter, one lowercase letter, one number and one special character."
+    ),
+});
+const CreateUserForm = ({ handleFormSubmit }) => {
   return (
-    <Box>
-      <Box marginTop="20px">
-        <Text fontSize="xl" fontWeight="bold">
-          Create your account
-        </Text>
-      </Box>
-      <Box marginTop="20px">
-        <FormControl>
-          <Input type="text" placeholder="Name" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <Input type="text" placeholder="Email" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <FormLabel htmlFor="dob">Date of birth</FormLabel>
-          <FormHelperText marginBottom="10px">
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </FormHelperText>
-          <DatePicker
-            id="dob"
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            showPopperArrow={false}
-            className="react-datapicker__input-text"
-          />
-        </FormControl>
-      </Box>
-      <Box marginTop="40px">
-        <Button
-          bg="twitter.600"
-          sx={{
-            "&:hover": {
-              bg: "twitter.700",
-            },
-          }}
-          rounded="full"
-          width="100%"
-          onClick={() => handleSetStep(4)}
-        >
-          Next
-        </Button>
-      </Box>
-    </Box>
-  );
-};
-const StepFour = ({ dob, setDob, handleSetStep }) => {
-  return (
-    <Box>
-      <Box marginTop="20px">
-        <Text fontSize="xl" fontWeight="bold">
-          Create your account
-        </Text>
-      </Box>
-      <Box marginTop="20px">
-        <FormControl>
-          <Input type="text" placeholder="Name" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <Input type="text" placeholder="Email" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <FormLabel htmlFor="dob">Date of birth</FormLabel>
-          <FormHelperText marginBottom="10px">
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </FormHelperText>
-          <DatePicker
-            id="dob"
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            showPopperArrow={false}
-            className="react-datapicker__input-text"
-          />
-        </FormControl>
-      </Box>
-      <Box marginTop="40px">
-        <Button
-          bg="twitter.600"
-          sx={{
-            "&:hover": {
-              bg: "twitter.700",
-            },
-          }}
-          rounded="full"
-          width="100%"
-          onClick={() => handleSetStep(5)}
-        >
-          Next
-        </Button>
-      </Box>
-    </Box>
-  );
-};
-const StepFive = ({ dob, setDob, handleSetStep }) => {
-  return (
-    <Box>
-      <Box marginTop="20px">
-        <Text fontSize="xl" fontWeight="bold">
-          Create your account
-        </Text>
-      </Box>
-      <Box marginTop="20px">
-        <FormControl>
-          <Input type="text" placeholder="Name" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <Input type="text" placeholder="Email" marginTop="20px" size="lg" />
-        </FormControl>
-        <FormControl marginTop="20px">
-          <FormLabel htmlFor="dob">Date of birth</FormLabel>
-          <FormHelperText marginBottom="10px">
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </FormHelperText>
-          <DatePicker
-            id="dob"
-            selected={dob}
-            onChange={(date) => setDob(date)}
-            showPopperArrow={false}
-            className="react-datapicker__input-text"
-          />
-        </FormControl>
-      </Box>
-      <Box marginTop="40px">
-        <Button
-          bg="twitter.600"
-          sx={{
-            "&:hover": {
-              bg: "twitter.700",
-            },
-          }}
-          rounded="full"
-          width="100%"
-          onClick={() => handleSetStep(1)}
-        >
-          Next
-        </Button>
-      </Box>
-    </Box>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={FormValidation}
+      onSubmit={handleFormSubmit}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        isSubmitting,
+      }) => (
+        <Box>
+          <Box marginTop="20px">
+            <Text fontSize="xl" fontWeight="bold">
+              Create your account
+            </Text>
+          </Box>
+          <Box marginTop="20px">
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="Username"
+                marginTop="20px"
+                size="lg"
+                name="username"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.username}
+              />
+              <FormHelperText color="red.400">
+                {errors.username && touched.username && errors.username}
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="Email"
+                marginTop="20px"
+                size="lg"
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+              />
+              <FormHelperText color="red.400">
+                {errors.email && touched.email && errors.email}
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <Input
+                type="password"
+                placeholder="Password"
+                marginTop="20px"
+                size="lg"
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+              />
+              <FormHelperText color="red.400">
+                {errors.password && touched.password && errors.password}
+              </FormHelperText>
+            </FormControl>
+          </Box>
+          <Box marginTop="40px">
+            <Button
+              bg="twitter.600"
+              sx={{
+                "&:hover": {
+                  bg: "twitter.700",
+                },
+              }}
+              rounded="full"
+              width="100%"
+              type="submit"
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              Done
+            </Button>
+          </Box>
+        </Box>
+      )}
+    </Formik>
   );
 };
 
 const Home = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [dob, setDob] = useState(new Date());
-  const [step, setStep] = useState(1);
 
-  const handleSetStep = (currentStep: number) => {
-    if (currentStep === 5) {
-      return;
-    }
-    setStep(currentStep);
+  const handleFormSubmit = async ({ values }: { values: InitialValues }) => {
+    await auth("register", values);
   };
-
-  const renderStep = (currentStep: number) => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <StepOne dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-      case 2:
-        return (
-          <StepTwo dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-      case 3:
-        return (
-          <StepThree dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-      case 4:
-        return (
-          <StepFour dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-      case 5:
-        return (
-          <StepFive dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-      default:
-        return (
-          <StepOne dob={dob} setDob={setDob} handleSetStep={handleSetStep} />
-        );
-    }
-  };
-
   return (
     <SimpleBar>
       <Box bg="black" minHeight="100vh" width="100vw" color="white">
@@ -449,7 +286,9 @@ const Home = () => {
             </Box>
           </Box>
 
-          <ModalBody>{renderStep(step)}</ModalBody>
+          <ModalBody>
+            <CreateUserForm handleFormSubmit={handleFormSubmit} />
+          </ModalBody>
         </ModalContent>
       </Modal>
     </SimpleBar>
