@@ -1,4 +1,5 @@
 import { Box, Flex, Container } from "@chakra-ui/layout";
+import SimpleBar from "simplebar-react";
 import LeftSidebar from "../LeftSidebar";
 import RightSidebar from "../RightSidebar";
 import Feed from "../Feed";
@@ -12,16 +13,20 @@ const PageLayout = ({ children }) => {
             <LeftSidebar />
           </Box>
           <Box
-            width="55%"
-            height="100vh"
+            width="50%"
             overflow="scroll"
             borderLeft="2px solid"
+            borderRight="2px solid"
             borderColor="gray.800"
           >
-            <Feed>{children}</Feed>
+            <SimpleBar style={{ height: "100vh" }}>
+              <Feed>{children}</Feed>
+            </SimpleBar>
           </Box>
-          <Box width="25%" borderLeft="2px solid" borderColor="gray.800">
-            <RightSidebar />
+          <Box width="30%" height="100vh" overflow="scroll">
+            <SimpleBar style={{ height: "100vh" }}>
+              <RightSidebar />
+            </SimpleBar>
           </Box>
         </Flex>
       </Container>

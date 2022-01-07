@@ -8,7 +8,7 @@ const Feed = ({ children }) => {
     <Box>
       <Box
         padding="20px"
-        position="fixed"
+        position="sticky"
         top="0"
         bg="rgba(0, 0, 0, 0.65);"
         backdropFilter="blur(12px)"
@@ -19,12 +19,7 @@ const Feed = ({ children }) => {
           Home
         </Text>
       </Box>
-      <Box
-        marginTop="10%"
-        padding="20px"
-        borderBottom="2px solid"
-        borderColor="gray.800"
-      >
+      <Box padding="20px" borderBottom="2px solid" borderColor="gray.800">
         <Flex width="100%">
           <Box mr="15px">
             <Avatar name="Albert Akrong" />

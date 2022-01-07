@@ -36,6 +36,13 @@ Home.defaultProps = {
       content: "Hello World",
       imageSrc: "http://placekitten.com/300",
     },
+    {
+      name: "Albert King",
+      src: "https://bit.ly/code-beast",
+      username: "alphaxsalt",
+      content:
+        "Most people want to see you to do better, but not doing better than them.",
+    },
   ],
 };
 

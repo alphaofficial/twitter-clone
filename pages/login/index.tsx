@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 import SimpleBar from "simplebar-react";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { isValidEmail, isValidPassword } from "../../lib/validators";
+import { isValidEmail } from "../../lib/validators";
 import { auth } from "../../lib/mutations";
 
 const Login = () => {
@@ -173,7 +173,6 @@ const Login = () => {
                     size="lg"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    isInvalid={!isValidPassword(password)}
                   />
                   <InputRightElement>
                     <IconButton
@@ -205,7 +204,7 @@ const Login = () => {
                 rounded="full"
                 fontWeight="bold"
                 color="black"
-                disabled={password.length === 0 || !isValidPassword(password)}
+                disabled={password.length === 0}
                 onClick={() => {
                   setCurrentStep(2);
                 }}
