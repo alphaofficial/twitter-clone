@@ -1,26 +1,26 @@
 import { Box, Flex, Container } from "@chakra-ui/layout";
 import LeftSidebar from "../LeftSidebar";
 import RightSidebar from "../RightSidebar";
+import Feed from "../Feed";
 
 const PageLayout = ({ children }) => {
   return (
     <Box bg="black" color="white" height="100vh">
       <Container maxW="container.xl">
         <Flex justifyContent="space-between">
-          <Box width="25%">
+          <Box width="20%">
             <LeftSidebar />
           </Box>
           <Box
-            width="50%"
+            width="55%"
             height="100vh"
             overflow="scroll"
-            borderLeft="1px solid"
-            borderRight="1px solid"
+            borderLeft="2px solid"
             borderColor="gray.800"
           >
-            <Box>{children}</Box>
+            <Feed>{children}</Feed>
           </Box>
-          <Box width="25%">
+          <Box width="25%" borderLeft="2px solid" borderColor="gray.800">
             <RightSidebar />
           </Box>
         </Flex>

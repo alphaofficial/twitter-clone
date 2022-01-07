@@ -1,16 +1,42 @@
-import { Box, Text } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/layout";
 import PageLayout from "../../components/pageLayout";
+import Tweet from "../../components/Tweet";
 
-const Home = () => {
+const Home = ({ tweets }) => {
   return (
     <PageLayout>
-      <Box paddingX="10px">
-        {new Array(100).fill(1).map((_, i) => (
-          <Text paddingY="20px">{`Feed #${i}`}</Text>
+      <Box>
+        {tweets.map((tweet: any) => (
+          <Tweet tweet={tweet} />
         ))}
       </Box>
     </PageLayout>
   );
+};
+
+Home.defaultProps = {
+  tweets: [
+    {
+      name: "John Doe",
+      src: "https://bit.ly/dan-abramov",
+      username: "johndoe",
+      content: "Hello World",
+    },
+    {
+      name: "Jane Doe",
+      src: "https://bit.ly/dan-abramov",
+      username: "janedoe",
+      content: "Hello World",
+      imageSrc: "http://placekitten.com/300",
+    },
+    {
+      name: "Jane Doe",
+      src: "https://bit.ly/dan-abramov",
+      username: "johndoe",
+      content: "Hello World",
+      imageSrc: "http://placekitten.com/300",
+    },
+  ],
 };
 
 export default Home;
