@@ -60,6 +60,8 @@ yarn dev
 
 The project should now be available at http://localhost:4800
 
+![signup](https://i.ibb.co/pPrFW46/Screenshot-2022-01-07-at-3-25-03-AM.png)
+
 ## Technologies used
 
 - Next JS (React)
