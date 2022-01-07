@@ -84,7 +84,7 @@ const LeftSidebar = () => {
             </LinkBox>
           ))}
         </Box>
-        <Box width="200px">
+        <Box width="200px" marginTop="20px">
           <Button
             bg="twitter.500"
             size="lg"

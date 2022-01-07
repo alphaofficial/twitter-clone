@@ -38,8 +38,8 @@ const Tweet = ({
   return (
     <Box
       sx={{
-        _first: {
-          marginTop: "20%",
+        "&:hover": {
+          bg: "rgba(255, 255, 255, 0.03)",
         },
       }}
       padding="20px"
@@ -58,10 +58,16 @@ const Tweet = ({
             </Box>
             {tweet?.imageSrc && (
               <Box>
-                <Image src={tweet.imageSrc} borderRadius="12px" width="100%" />
+                <Image
+                  border="2px solid"
+                  borderColor="gray.800"
+                  src={tweet.imageSrc}
+                  borderRadius="12px"
+                  width="100%"
+                />
               </Box>
             )}
-            <Box marginTop="20px">
+            <Box marginTop="20px" width="80%">
               <Flex justifyContent="space-between" alignItems="center">
                 {actions.map((action) => (
                   <Flex key={action.name} alignItems="center" color="gray.500">
