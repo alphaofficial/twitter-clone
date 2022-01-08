@@ -30,18 +30,25 @@ import * as Yup from "yup";
 import { auth } from "../lib/mutations";
 
 type InitialValues = {
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   username: string;
 };
 
 const initialValues: InitialValues = {
+  firstname: "",
+  lastname: "",
   email: "",
   password: "",
   username: "",
 };
 
 const FormValidation = Yup.object().shape({
+  firstname: Yup.string().required("Firstname is required"),
+  lastname: Yup.string().required("Lastname is required"),
+  username: Yup.string().required("Username is required"),
   email: Yup.string().required("email is required").email("Invalid email"),
   password: Yup.string()
     .required("email is required")
@@ -69,6 +76,40 @@ const CreateUserForm = ({ handleFormSubmit }) => {
               <Text fontSize="xl" fontWeight="bold">
                 Create your account
               </Text>
+            </Box>
+            <Box marginTop="20px">
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="Firstname"
+                  marginTop="20px"
+                  size="lg"
+                  name="firstname"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstname}
+                />
+                <FormHelperText color="red.400">
+                  {errors.firstname && touched.firstname && errors.firstname}
+                </FormHelperText>
+              </FormControl>
+            </Box>
+            <Box marginTop="20px">
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="Lastname"
+                  marginTop="20px"
+                  size="lg"
+                  name="lastname"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastname}
+                />
+                <FormHelperText color="red.400">
+                  {errors.lastname && touched.lastname && errors.lastname}
+                </FormHelperText>
+              </FormControl>
             </Box>
             <Box marginTop="20px">
               <FormControl>

@@ -5,7 +5,7 @@ import cookie from "cookie";
 import prisma from "../../lib/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email, password, username } = req.body;
+  const { email, password, username, avatar, firstname, lastname } = req.body;
   let user;
   try {
     user = await prisma.user.findUnique({
@@ -20,9 +20,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       user = await prisma.user.create({
         data: {
+          firstname,
+          lastname,
           email,
           password: brcypt.hashSync(password, 10),
           username,
+          avatar: avatar || "https://i.pravatar.cc/300",
         },
       });
       if (user) {

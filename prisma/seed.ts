@@ -18,32 +18,22 @@ const run = async () => {
       {
         content: "My first tweet",
         userId: user.id,
-        likes: 0,
-        retweets: 0,
       },
       {
         content: "My second tweet",
         userId: user.id,
-        likes: 0,
-        retweets: 0,
       },
       {
         content: "My third tweet",
         userId: user.id,
-        likes: 0,
-        retweets: 0,
       },
       {
         content: "My fourth tweet",
         userId: user.id,
-        likes: 0,
-        retweets: 0,
       },
       {
         content: "My fifth tweet",
         userId: user.id,
-        likes: 0,
-        retweets: 0,
       },
     ],
     skipDuplicates: true, // Skip 'Bobo'
@@ -51,10 +41,7 @@ const run = async () => {
 };
 
 run()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
+  .catch(() => process.exit(1))
   .finally(async () => {
     await prisma.$disconnect();
   });

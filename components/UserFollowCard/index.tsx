@@ -1,9 +1,11 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { Avatar, Button, Text } from "@chakra-ui/react";
+import { nanoid } from "nanoid";
 
 const UserFollowCard = ({ name, username, avatar }) => {
   return (
     <Box
+      key={nanoid()}
       marginTop="10px"
       paddingX="20px"
       paddingY="10px"

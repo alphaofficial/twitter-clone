@@ -3,40 +3,35 @@ import { Avatar, Image } from "@chakra-ui/react";
 import { BsChatRight } from "react-icons/bs";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FiShare, FiHeart } from "react-icons/fi";
+import moment from "moment";
 
-const Tweet = ({
-  tweet,
-}: {
-  tweet: {
-    name: string;
-    src: string;
-    username: string;
-    content: string;
-    // eslint-disable-next-line react/require-default-props
-    imageSrc?: string;
-  };
-}) => {
-  const actions = [
+const Tweet = ({ tweet }) => {
+  const actions = ({ likes, replies, retweets }) => [
     {
       name: "reply",
       icon: <BsChatRight size={15} />,
+      number: replies,
     },
     {
       name: "retweet",
       icon: <AiOutlineRetweet size={15} />,
+      number: retweets,
     },
     {
       name: "like",
       icon: <FiHeart size={15} />,
+      number: likes,
     },
     {
       name: "share",
       icon: <FiShare size={15} />,
+      number: null,
     },
   ];
 
   return (
     <Box
+      key={tweet.id}
       sx={{
         "&:hover": {
           bg: "rgba(255, 255, 255, 0.03)",
@@ -49,10 +44,32 @@ const Tweet = ({
       <Box>
         <Flex>
           <Box mr="15px">
-            <Avatar name={tweet.name} src={tweet.src} />
+            <Avatar
+              name={`${tweet.user.firstname || "John"} ${
+                tweet.user.lastname || "Doe"
+              }`}
+              src={tweet.user.avatar || "https://bit.ly/dan-abramov"}
+            />
           </Box>
           <Box width="100%">
-            <Box fontWeight="bold">@{tweet.username}</Box>
+            <Flex alignItems="center">
+              <Box mr="5px">
+                <Text fontWeight="bold">{`${tweet.user.firstname || "John"} ${
+                  tweet.user.lastname || "Doe"
+                }`}</Text>
+              </Box>
+              <Box>
+                <Text color="gray.500">@{tweet.user.username}</Text>
+              </Box>
+              <Box mx="5px">
+                <Text color="gray.500">·</Text>
+              </Box>
+              <Box>
+                <Text color="gray.500">
+                  {moment(tweet.createdAt).format("MMM DD, YYYY")}
+                </Text>
+              </Box>
+            </Flex>
             <Box marginBottom="15px">
               <Text fontWeight="normal">{tweet.content}</Text>
             </Box>
@@ -67,13 +84,17 @@ const Tweet = ({
                 />
               </Box>
             )}
-            <Box marginTop="20px" width="80%">
+            <Box marginTop="20px" width="80%" fontSize="small">
               <Flex justifyContent="space-between" alignItems="center">
-                {actions.map((action) => (
+                {actions({
+                  likes: tweet.Likes.length,
+                  replies: tweet.Replies.length,
+                  retweets: tweet.Retweets.length,
+                }).map((action) => (
                   <Flex key={action.name} alignItems="center" color="gray.500">
                     {action.icon}
                     <Box ml="5px">
-                      <Text>9</Text>
+                      <Text>{action.number}</Text>
                     </Box>
                   </Flex>
                 ))}

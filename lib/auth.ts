@@ -12,7 +12,16 @@ export const validateRoute =
         const { id } = jwt.verify(token, process.env.JWT_SECRET) as {
           id: number;
         };
-        user = await prisma.user.findUnique({ where: { id } });
+        user = await prisma.user.findUnique({
+          where: { id },
+          include: {
+            Following: {
+              select: {
+                users: true,
+              },
+            },
+          },
+        });
         if (!user) {
           throw new Error("User not found");
         }

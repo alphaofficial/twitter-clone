@@ -1,9 +1,12 @@
-import { Box, Text } from "@chakra-ui/layout";
-import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { Box, Text, Center } from "@chakra-ui/layout";
+import { Input, InputGroup, InputLeftElement, Spinner } from "@chakra-ui/react";
+import { User } from "@prisma/client";
 import { IoMdSearch } from "react-icons/io";
+import { useUsers } from "../../lib/hooks";
 import UserFollowCard from "../UserFollowCard";
 
 const RightSidebar = () => {
+  const { users, isLoading } = useUsers();
   return (
     <Box>
       <Box
@@ -42,13 +45,19 @@ const RightSidebar = () => {
                 Who to follow
               </Text>
             </Box>
-            {new Array(5).fill(0).map((_, index) => (
-              <UserFollowCard
-                name="tiny 🍑 keycap maker"
-                avatar="https://bit.ly/dan-abramov"
-                username="tinymakesthings"
-              />
-            ))}
+            {isLoading ? (
+              <Center width="100%">
+                <Spinner />
+              </Center>
+            ) : (
+              users.map((user: User) => (
+                <UserFollowCard
+                  name={`${user.firstname || "Jane"} ${user.lastname || "Doe"}`}
+                  avatar={user.avatar}
+                  username={user.username}
+                />
+              ))
+            )}
           </Box>
         </Box>
       </Box>

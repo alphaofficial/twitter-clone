@@ -21,6 +21,9 @@ model User {
   phonenumber String?    @unique
   firstname   String?
   lastname    String?
+  bio         String?
+  dob         String?
+  avatar      String?
   followedBy  User[]     @relation("UserToUser")
   User        User?      @relation("UserToUser", fields: [userId], references: [id])
   userId      Int?
@@ -31,6 +34,7 @@ model User {
   Retweets    Retweets?  @relation(fields: [retweetsId], references: [id])
   retweetsId  Int?
   Tweet       Tweet[]
+  Replies     Replies[]
 }
 
 model Following {
@@ -42,14 +46,26 @@ model Following {
 }
 
 model Tweet {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  content   String
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  Retweets  Retweets[]
+  Likes     Likes[]
+  Replies   Replies[]
+}
+
+model Replies {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   content   String
-  likes     Int
-  retweets  Int
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  tweetId   Int
+  tweet     Tweet    @relation(fields: [tweetId], references: [id])
 }
 
 model Likes {
@@ -58,6 +74,7 @@ model Likes {
   updatedAt DateTime @updatedAt
   tweetId   Int
   users     User[]
+  Tweet     Tweet    @relation(fields: [tweetId], references: [id])
 }
 
 model Retweets {
@@ -66,4 +83,5 @@ model Retweets {
   updatedAt DateTime @updatedAt
   tweetId   Int
   users     User[]
+  Tweet     Tweet    @relation(fields: [tweetId], references: [id])
 }
