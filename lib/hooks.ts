@@ -3,7 +3,7 @@ import { fetcher } from "./fetcher";
 
 // get user
 export const useUser = () => {
-  const { data, error } = useSWR(`users`, fetcher);
+  const { data, error } = useSWR(`user`, fetcher);
   return { user: data, isLoading: !data && !error, isError: error };
 };
 
@@ -14,7 +14,7 @@ export const useUsers = () => {
 };
 
 // get tweets
-export const useTweets = () => {
-  const { data, error } = useSWR(`tweets`, fetcher);
+export const useTweets = (fallback = null) => {
+  const { data, error } = useSWR(`tweets`, fetcher, { fallback });
   return { tweets: data, isLoading: !data && !error, isError: error };
 };

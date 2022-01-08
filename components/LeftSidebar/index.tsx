@@ -60,6 +60,7 @@ const LeftSidebar = () => {
         <Box marginTop="20px">
           {menuItems.map((item) => (
             <LinkBox
+              key={item.name}
               marginBottom="20px"
               paddingY="10px"
               paddingX="15px"

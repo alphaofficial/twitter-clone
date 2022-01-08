@@ -31,7 +31,6 @@ const Tweet = ({ tweet }) => {
 
   return (
     <Box
-      key={tweet.id}
       sx={{
         "&:hover": {
           bg: "rgba(255, 255, 255, 0.03)",

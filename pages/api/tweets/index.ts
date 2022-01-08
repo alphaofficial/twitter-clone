@@ -56,6 +56,28 @@ handler.post(
             content,
             userId: user.id,
           },
+
+          include: {
+            user: {
+              select: {
+                firstname: true,
+                lastname: true,
+                username: true,
+                avatar: true,
+              },
+            },
+            Replies: true,
+            Likes: {
+              select: {
+                users: true,
+              },
+            },
+            Retweets: {
+              select: {
+                users: true,
+              },
+            },
+          },
         });
 
         if (tweet) {

@@ -38,6 +38,7 @@ const RightSidebar = () => {
           borderRadius="2xl"
           paddingY="10px"
           marginTop="20px"
+          minHeight="250px"
         >
           <Box>
             <Box paddingX="20px">
@@ -46,12 +47,13 @@ const RightSidebar = () => {
               </Text>
             </Box>
             {isLoading ? (
-              <Center width="100%">
+              <Center width="100%" height="200">
                 <Spinner />
               </Center>
             ) : (
               users.map((user: User) => (
                 <UserFollowCard
+                  key={user.username}
                   name={`${user.firstname || "Jane"} ${user.lastname || "Doe"}`}
                   avatar={user.avatar}
                   username={user.username}
