@@ -51,7 +51,7 @@ const RightSidebar = () => {
                 <Spinner />
               </Center>
             ) : (
-              users.map((user: User) => (
+              users?.map((user: User) => (
                 <UserFollowCard
                   key={user.username}
                   name={`${user.firstname || "Jane"} ${user.lastname || "Doe"}`}

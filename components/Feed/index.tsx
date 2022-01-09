@@ -3,35 +3,32 @@ import {
   Avatar,
   Button,
   CircularProgress,
-  Input,
+  IconButton,
   Skeleton,
+  Textarea,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { BiImage } from "react-icons/bi";
-import { VscSmiley } from "react-icons/vsc";
+import React, { useState } from "react";
 import { useSWRConfig } from "swr";
+import { VscSmiley } from "react-icons/vsc";
 import { fetcher } from "../../lib/fetcher";
 import { useUser } from "../../lib/hooks";
+
+const totalCount = 280;
 
 const Feed = ({ children }) => {
   const { mutate, cache } = useSWRConfig();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
 
-  const handleCharCount = (chars: string) => {
-    const totalCount = 280;
-    const remainingCount = totalCount - chars.length;
-    const percentage = (remainingCount / totalCount) * 100;
-    return percentage;
-  };
   const handleTweet = async () => {
     setContent("");
     const { tweet } = await fetcher("tweets", { content });
     if (tweet) {
       const data = cache.get("tweets");
-      await mutate("/tweets", { ...data, tweet });
+      await mutate("tweets", { ...data, tweet });
     }
   };
+
   return (
     <Box>
       <Box
@@ -58,7 +55,7 @@ const Feed = ({ children }) => {
             </Box>
             <Box width="100%">
               <Box marginTop="10px">
-                <Input
+                <Textarea
                   _placeholder={{
                     color: "#6d767c",
                   }}
@@ -68,17 +65,26 @@ const Feed = ({ children }) => {
                   placeholder="What's happening?"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
+                  maxLength={totalCount}
                 />
               </Box>
               <Box marginTop="20px" color="twitter.500">
                 <Flex justifyContent="space-between" alignItems="center">
-                  <Box>
+                  <Box position="relative">
                     <Flex justifyContent="space-between" alignItems="center">
-                      <Box mr="4px">
+                      {/* <Box mr="4px">
                         <BiImage size={20} />
-                      </Box>
-                      <Box>
-                        <VscSmiley size={20} />
+                      </Box> */}
+                      <Box position="absolute" left="-10px">
+                        <IconButton
+                          _hover={{
+                            bg: "transparent",
+                          }}
+                          aria-label="emoji-button"
+                          variant="ghost"
+                        >
+                          <VscSmiley size={20} />
+                        </IconButton>
                       </Box>
                     </Flex>
                   </Box>
@@ -86,9 +92,10 @@ const Feed = ({ children }) => {
                     <Flex alignItems="center">
                       <Box mr="5px">
                         <CircularProgress
-                          color="red"
-                          value={handleCharCount(content)}
+                          color={content.length > 250 ? "red" : "twitter.500"}
+                          value={content.length}
                           size={25}
+                          max={totalCount}
                         />
                       </Box>
                       <Box>

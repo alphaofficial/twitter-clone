@@ -19,6 +19,7 @@
     "cookie": "^0.4.1",
     "cookies": "^0.8.0",
     "easy-peasy": "^5.0.4",
+    "emoji-picker-react": "^3.5.0",
     "format-duration": "^1.4.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
