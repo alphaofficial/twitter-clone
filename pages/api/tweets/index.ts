@@ -23,15 +23,11 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         },
         Replies: true,
         Likes: {
-          select: {
+          include: {
             users: true,
           },
         },
-        Retweets: {
-          select: {
-            users: true,
-          },
-        },
+        Retweets: true,
       },
     });
     if (tweets) {
@@ -49,6 +45,10 @@ handler.post(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: User) => {
       const { content } = req.body;
+      if (!content.length) {
+        res.status(204);
+        res.json({ error: "No content provided" });
+      }
       let tweet;
       try {
         tweet = await prisma.tweet.create({

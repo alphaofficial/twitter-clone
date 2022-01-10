@@ -37,6 +37,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
     });
+
     if (tweet) {
       res.status(200);
       res.json(tweet);
@@ -55,7 +56,7 @@ handler.post(
       switch (action) {
         case "like":
           try {
-            const like = await prisma.tweet.update({
+            const tweet = await prisma.tweet.update({
               where: {
                 id: +req.query.id,
               },
@@ -70,10 +71,21 @@ handler.post(
                   },
                 },
               },
+              include: {
+                Likes: {
+                  select: {
+                    users: {
+                      select: {
+                        id: true,
+                      },
+                    },
+                  },
+                },
+              },
             });
-            if (like) {
+            if (tweet) {
               res.status(200);
-              res.json(like);
+              res.json(tweet);
             }
             throw new Error("No likes found");
           } catch (error) {

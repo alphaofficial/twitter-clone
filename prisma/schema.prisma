@@ -53,7 +53,7 @@ model Tweet {
   userId    Int
   user      User       @relation(fields: [userId], references: [id])
   Retweets  Retweets[]
-  Likes     []
+  Likes     Likes[]
   Replies   Replies[]
 }
 

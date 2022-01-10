@@ -9,7 +9,7 @@ const Home = ({ fallback }) => {
   return (
     <PageLayout>
       <Box>
-        {tweets.map((tweet: any) => (
+        {tweets?.map((tweet: any) => (
           <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </Box>
