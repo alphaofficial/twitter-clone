@@ -13,7 +13,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     tweets = await prisma.tweet.findMany({
       include: {
-        user: {
+        User: {
           select: {
             firstname: true,
             lastname: true,
@@ -21,13 +21,17 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
             avatar: true,
           },
         },
-        Replies: true,
-        Likes: {
-          include: {
-            users: true,
+        retweets: {
+          select: {
+            userId: true,
           },
         },
-        Retweets: true,
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+        replies: true,
       },
     });
     if (tweets) {
@@ -58,7 +62,7 @@ handler.post(
           },
 
           include: {
-            user: {
+            User: {
               select: {
                 firstname: true,
                 lastname: true,
@@ -66,17 +70,9 @@ handler.post(
                 avatar: true,
               },
             },
-            Replies: true,
-            Likes: {
-              select: {
-                users: true,
-              },
-            },
-            Retweets: {
-              select: {
-                users: true,
-              },
-            },
+            replies: true,
+            likes: true,
+            retweets: true,
           },
         });
 
