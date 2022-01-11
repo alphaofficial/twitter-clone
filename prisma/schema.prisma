@@ -12,76 +12,63 @@ datasource db {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  email       String?    @unique
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  email       String?   @unique
   password    String
-  username    String     @unique
-  phonenumber String?    @unique
+  username    String    @unique
+  phonenumber String?   @unique
   firstname   String?
   lastname    String?
   bio         String?
   dob         String?
   avatar      String?
-  followedBy  User[]     @relation("UserToUser")
-  User        User?      @relation("UserToUser", fields: [userId], references: [id])
-  userId      Int?
-  Following   Following? @relation(fields: [followingId], references: [id])
-  followingId Int?
-  Likes       Likes?     @relation(fields: [likesId], references: [id])
-  likesId     Int?
-  Retweets    Retweets?  @relation(fields: [retweetsId], references: [id])
-  retweetsId  Int?
   Tweet       Tweet[]
-  Replies     Replies[]
-}
-
-model Following {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  users     User[]
+  Reply       Reply[]
+  Like        Like[]
+  Retweet     Retweet[]
 }
 
 model Tweet {
-  id        Int        @id @default(autoincrement())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   content   String
+  User      User?     @relation(fields: [userId], references: [id])
   userId    Int
-  user      User       @relation(fields: [userId], references: [id])
-  Retweets  Retweets[]
-  Likes     []
-  Replies   Replies[]
+  likes     Like[]
+  retweets  Retweet[]
+  replies   Reply[]
 }
 
-model Replies {
+model Reply {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   content   String
+  User      User?    @relation(fields: [userId], references: [id])
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  tweetId   Int
-  tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  Tweet     Tweet?   @relation(fields: [tweetId], references: [id])
+  tweetId   Int?
 }
 
-model Likes {
+model Like {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tweetId   Int
-  users     User[]
-  Tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int
+  Tweet     Tweet?   @relation(fields: [tweetId], references: [id])
+  tweetId   Int?
 }
 
-model Retweets {
+model Retweet {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tweetId   Int
-  users     User[]
-  Tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int
+  Tweet     Tweet?   @relation(fields: [tweetId], references: [id])
+  tweetId   Int?
 }

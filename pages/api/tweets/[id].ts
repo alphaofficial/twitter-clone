@@ -16,7 +16,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         id: +req.query.id,
       },
       include: {
-        user: {
+        User: {
           select: {
             firstname: true,
             lastname: true,
@@ -24,19 +24,12 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
             avatar: true,
           },
         },
-        Replies: true,
-        Likes: {
-          select: {
-            users: true,
-          },
-        },
-        Retweets: {
-          select: {
-            users: true,
-          },
-        },
+        replies: true,
+        likes: true,
+        retweets: true,
       },
     });
+
     if (tweet) {
       res.status(200);
       res.json(tweet);
@@ -44,7 +37,6 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error("No tweets found");
   } catch (error) {
     res.status(204);
-    res.json({ error: error.message });
   }
 });
 
@@ -55,25 +47,20 @@ handler.post(
       switch (action) {
         case "like":
           try {
-            const like = await prisma.tweet.update({
-              where: {
-                id: +req.query.id,
-              },
+            // create like
+            const likedTweet = await prisma.like.create({
               data: {
-                Likes: {
-                  create: {
-                    users: {
-                      connect: {
-                        id: user.id,
-                      },
-                    },
-                  },
-                },
+                userId: user.id,
+                tweetId: +req.query.id,
+              },
+              include: {
+                Tweet: true,
               },
             });
-            if (like) {
+
+            if (likedTweet) {
               res.status(200);
-              res.json(like);
+              res.json({ likedTweet });
             }
             throw new Error("No likes found");
           } catch (error) {

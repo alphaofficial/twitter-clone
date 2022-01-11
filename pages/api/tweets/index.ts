@@ -13,7 +13,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     tweets = await prisma.tweet.findMany({
       include: {
-        user: {
+        User: {
           select: {
             firstname: true,
             lastname: true,
@@ -21,17 +21,17 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
             avatar: true,
           },
         },
-        Replies: true,
-        Likes: {
+        retweets: {
           select: {
-            users: true,
+            userId: true,
           },
         },
-        Retweets: {
+        likes: {
           select: {
-            users: true,
+            userId: true,
           },
         },
+        replies: true,
       },
     });
     if (tweets) {
@@ -49,6 +49,10 @@ handler.post(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: User) => {
       const { content } = req.body;
+      if (!content.length) {
+        res.status(204);
+        res.json({ error: "No content provided" });
+      }
       let tweet;
       try {
         tweet = await prisma.tweet.create({
@@ -58,7 +62,7 @@ handler.post(
           },
 
           include: {
-            user: {
+            User: {
               select: {
                 firstname: true,
                 lastname: true,
@@ -66,17 +70,9 @@ handler.post(
                 avatar: true,
               },
             },
-            Replies: true,
-            Likes: {
-              select: {
-                users: true,
-              },
-            },
-            Retweets: {
-              select: {
-                users: true,
-              },
-            },
+            replies: true,
+            likes: true,
+            retweets: true,
           },
         });
 

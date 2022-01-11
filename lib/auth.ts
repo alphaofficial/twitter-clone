@@ -14,13 +14,6 @@ export const validateRoute =
         };
         user = await prisma.user.findUnique({
           where: { id },
-          include: {
-            Following: {
-              select: {
-                users: true,
-              },
-            },
-          },
         });
         if (!user) {
           throw new Error("User not found");

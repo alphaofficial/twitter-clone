@@ -2,14 +2,13 @@ import { Box } from "@chakra-ui/layout";
 import PageLayout from "../../components/pageLayout";
 import Tweet from "../../components/Tweet";
 import { useTweets } from "../../lib/hooks";
-import prisma from "../../lib/prisma";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
   return (
     <PageLayout>
       <Box>
-        {tweets.map((tweet: any) => (
+        {tweets?.map((tweet: any) => (
           <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </Box>
@@ -18,29 +17,8 @@ const Home = ({ fallback }) => {
 };
 
 export const getServerSideProps = async () => {
-  const tweets = await prisma.tweet.findMany({
-    include: {
-      user: {
-        select: {
-          firstname: true,
-          lastname: true,
-          username: true,
-          avatar: true,
-        },
-      },
-      Replies: true,
-      Likes: {
-        select: {
-          users: true,
-        },
-      },
-      Retweets: {
-        select: {
-          users: true,
-        },
-      },
-    },
-  });
+  const req = await fetch(`${process.env.API_HOST}/api/tweets`);
+  const tweets = await req.json();
   if (tweets) {
     return {
       props: {
