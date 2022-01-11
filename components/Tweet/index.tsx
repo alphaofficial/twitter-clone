@@ -73,7 +73,7 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
       (like: { userId: string }) => like.userId === user?.id
     );
     const retweeted = tweet.retweets.find(
-      (like: { userId: string }) => like.userId === user?.id
+      (retweet: { userId: string }) => retweet.userId === user?.id
     );
     setUserLiked(!!liked);
     setUserRetweeted(!!retweeted);

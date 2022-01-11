@@ -9,11 +9,11 @@ const PageLayout = ({ children }) => {
     <Box bg="black" color="white" height="100vh">
       <Container maxW="container.xl">
         <Flex justifyContent="space-between">
-          <Box width="20%">
+          <Box width="300px">
             <LeftSidebar />
           </Box>
           <Box
-            width="50%"
+            width="calc(100% - 620px)"
             overflow="scroll"
             borderLeft="2px solid"
             borderRight="2px solid"
@@ -23,7 +23,7 @@ const PageLayout = ({ children }) => {
               <Feed>{children}</Feed>
             </SimpleBar>
           </Box>
-          <Box width="30%" height="100vh" overflow="scroll">
+          <Box width="320px" height="100vh" overflow="scroll">
             <SimpleBar style={{ height: "100vh" }}>
               <RightSidebar />
             </SimpleBar>
