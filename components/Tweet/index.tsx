@@ -23,33 +23,38 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   const { user } = useUser();
   const [userLiked, setUserLiked] = useState<boolean>(false);
   const [userRetweeted, setUserRetweeted] = useState(false);
+  const [hasActed, setHasActed] = useState(false);
 
-  const handler = async (action: "like" | "retweet" | "reply" | "share") => {
-    if (action === "like") {
-      await fetcher(`tweets/${tweet.id}`, { action });
-      return;
-    }
-    return null;
+  const handler = async (action: "reply" | "share") => {};
+
+  const likeTweet = () => {
+    setUserLiked((prev) => !prev);
+    setHasActed(true);
   };
 
-  const actions = ({ likes, replies, retweets }) => [
+  const retweet = () => {
+    setUserRetweeted((prev) => !prev);
+    setHasActed(true);
+  };
+
+  const actions = ({ likes, retweets }) => [
     {
       name: "reply",
       icon: (color: string) => renderIcon({ icon: "reply", color }),
-      number: replies,
+      number: null,
       handler: () => handler("reply"),
     },
     {
       name: "retweet",
       icon: (color: string) => renderIcon({ icon: "retweet", color }),
       number: retweets,
-      handler: () => handler("retweet"),
+      handler: retweet,
     },
     {
       name: "like",
       icon: (color: string) => renderIcon({ icon: "like", color }),
       number: likes,
-      handler: () => handler("like"),
+      handler: likeTweet,
     },
     {
       name: "share",
@@ -61,19 +66,40 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
 
   const handleStateColor = (actionName: string) => {
     const iconStateColor: { [key: string]: string } = {
-      liked: userLiked ? "red.500" : "gray.500",
-      retweeted: userRetweeted ? "blue.500" : "gray.500",
+      like: userLiked ? "#fa197f;" : "#6d767c",
+      retweet: userRetweeted ? "#00ba7c" : "#6d767c",
     };
 
-    return iconStateColor[actionName] || "gray.500";
+    return iconStateColor[actionName] || "#6d767c";
+  };
+
+  const handleHoverColor = (actionName: string) => {
+    const iconStateColor: { [key: string]: string } = {
+      like: "#fa197f",
+      retweet: "#00ba7c",
+    };
+
+    return iconStateColor[actionName] || "#6d767c";
   };
 
   useEffect(() => {
+    if (hasActed) {
+      setHasActed(false);
+      if (userLiked) {
+        fetcher(`tweets/${tweet.id}`, { action: "like" });
+      }
+      if (userRetweeted) {
+        fetcher(`tweets/${tweet.id}`, { action: "retweet" });
+      }
+    }
+  }, [hasActed, tweet, userLiked, userRetweeted]);
+
+  useEffect(() => {
     const liked = tweet.likes.find(
-      (like: { userId: string }) => like.userId === user?.id
+      (t: { userId: string }) => t.userId === user?.id
     );
     const retweeted = tweet.retweets.find(
-      (retweet: { userId: string }) => retweet.userId === user?.id
+      (t: { userId: string }) => t.userId === user?.id
     );
     setUserLiked(!!liked);
     setUserRetweeted(!!retweeted);
@@ -137,7 +163,6 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
               <Flex justifyContent="space-between" alignItems="center">
                 {actions({
                   likes: tweet.likes.length,
-                  replies: tweet.replies.length,
                   retweets: tweet.retweets.length,
                 }).map((action) => (
                   <IconButton
@@ -148,7 +173,17 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
                     }}
                     onClick={action.handler}
                   >
-                    <Flex key={action.name} alignItems="center">
+                    <Flex
+                      key={action.name}
+                      alignItems="center"
+                      color={handleStateColor(action.name)}
+                      sx={{
+                        "&:hover": {
+                          color: handleHoverColor(action.name),
+                          bg: `${handleHoverColor(action.name)}1A`,
+                        },
+                      }}
+                    >
                       {action.icon(handleStateColor(action.name))}
                       <Box ml="5px">
                         <Text>{action.number}</Text>

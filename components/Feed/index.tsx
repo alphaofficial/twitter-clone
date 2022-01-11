@@ -8,7 +8,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useSWRConfig } from "swr";
 import { VscSmiley } from "react-icons/vsc";
 import { fetcher } from "../../lib/fetcher";
 import { useUser } from "../../lib/hooks";
@@ -16,17 +15,12 @@ import { useUser } from "../../lib/hooks";
 const totalCount = 280;
 
 const Feed = ({ children }) => {
-  const { mutate, cache } = useSWRConfig();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
 
   const handleTweet = async () => {
     setContent("");
-    const { tweet } = await fetcher("tweets", { content });
-    if (tweet) {
-      const data = cache.get("tweets");
-      await mutate("tweets", { ...data, tweet });
-    }
+    await fetcher("tweets", { content });
   };
 
   return (

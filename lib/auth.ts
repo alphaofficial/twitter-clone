@@ -20,11 +20,11 @@ export const validateRoute =
         }
       } catch (error) {
         res.status(401);
-        res.json({ error: "Unauthorized" });
+        res.redirect("/");
       }
 
       return handler(req, res, user);
     }
     res.status(401);
-    res.json({ error: "Unauthorized" });
+    res.redirect("/");
   };
