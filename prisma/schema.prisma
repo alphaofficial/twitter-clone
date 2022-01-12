@@ -35,6 +35,7 @@ model Tweet {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   content   String
+  imageSrc  String?   @default("https://picsum.photos/300")
   User      User?     @relation(fields: [userId], references: [id])
   userId    Int
   likes     Like[]

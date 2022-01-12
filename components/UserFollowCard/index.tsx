@@ -14,7 +14,7 @@ const UserFollowCard = ({ name, username, avatar }) => {
       }}
     >
       <Flex justifyContent="space-between" alignItems="center">
-        <Box>
+        <Box width="40px">
           <Avatar name={name} src={avatar} />
         </Box>
         <Box>
