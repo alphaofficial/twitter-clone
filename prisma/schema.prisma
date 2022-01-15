@@ -28,6 +28,8 @@ model User {
   Reply       Reply[]
   Like        Like[]
   Retweet     Retweet[]
+  followers   Follows[] @relation("follower")
+  following   Follows[] @relation("following")
 }
 
 model Tweet {
@@ -35,7 +37,7 @@ model Tweet {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   content   String
-  imageSrc  String?   @default("https://picsum.photos/300")
+  imageSrc  String[]
   User      User?     @relation(fields: [userId], references: [id])
   userId    Int
   likes     Like[]
@@ -72,4 +74,13 @@ model Retweet {
   userId    Int
   Tweet     Tweet?   @relation(fields: [tweetId], references: [id])
   tweetId   Int?
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 }

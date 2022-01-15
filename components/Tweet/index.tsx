@@ -1,12 +1,13 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { FC, useEffect, useState } from "react";
-import { Avatar, IconButton, Image } from "@chakra-ui/react";
+import { Avatar, IconButton, Image, Skeleton } from "@chakra-ui/react";
 import { BsChatRight } from "react-icons/bs";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FiShare, FiHeart } from "react-icons/fi";
 import moment from "moment";
 import { fetcher } from "../../lib/fetcher";
 import { useUser } from "../../lib/hooks";
+import { ITweet } from "../../types";
 
 const renderIcon = ({ icon, color, size = 15 }) => {
   const iconTypes: { [key: string]: any } = {
@@ -19,12 +20,14 @@ const renderIcon = ({ icon, color, size = 15 }) => {
   return iconTypes[icon];
 };
 
-const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
+const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
   const { user } = useUser();
   const [userLiked, setUserLiked] = useState<boolean>(false);
   const [userRetweeted, setUserRetweeted] = useState(false);
   const [hasActed, setHasActed] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const handler = async (action: "reply" | "share") => {};
 
   const likeTweet = () => {
@@ -120,45 +123,53 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
         <Flex>
           <Box mr="15px">
             <Avatar
-              name={`${tweet?.user?.firstname || "John"} ${
-                tweet?.user?.lastname || "Doe"
+              name={`${tweet.user.firstname || "John"} ${
+                tweet.user.lastname || "Doe"
               }`}
-              src={tweet?.user?.avatar || "https://bit.ly/dan-abramov"}
+              src={tweet.user.avatar || "https://bit.ly/dan-abramov"}
             />
           </Box>
           <Box width="100%">
             <Flex alignItems="center">
               <Box mr="5px">
-                <Text fontWeight="bold">{`${tweet?.user?.firstname || "John"} ${
-                  tweet?.user?.lastname || "Doe"
+                <Text fontWeight="bold">{`${tweet.user.firstname || "John"} ${
+                  tweet.user.lastname || "Doe"
                 }`}</Text>
               </Box>
               <Box>
-                <Text color="gray.500">@{tweet?.user?.username}</Text>
+                <Text color="gray.500">@{tweet.user.username}</Text>
               </Box>
               <Box mx="5px">
                 <Text color="gray.500">·</Text>
               </Box>
               <Box>
                 <Text color="gray.500">
-                  {moment(tweet?.createdAt).format("MMM DD, YYYY")}
+                  {moment(tweet.createdAt).format("MMM DD, YYYY")}
                 </Text>
               </Box>
             </Flex>
             <Box marginBottom="15px">
-              <Text fontWeight="normal">{tweet?.content}</Text>
+              <Text fontWeight="small">{tweet?.content}</Text>
             </Box>
-            {tweet?.imageSrc && (
-              <Box>
-                <Image
-                  border="2px solid"
-                  borderColor="gray.800"
-                  src={tweet.imageSrc}
-                  borderRadius="12px"
-                  width="100%"
-                />
-              </Box>
-            )}
+            {tweet.imageSrc.length ? (
+              <Skeleton
+                startColor="gray.500"
+                endColor="gray.600"
+                isLoaded={imageLoaded}
+                borderRadius="12px"
+              >
+                <Box width="100%" height={imageLoaded ? "auto" : "max-content"}>
+                  <Image
+                    border="2px solid"
+                    borderColor="gray.800"
+                    src={tweet.imageSrc[0]}
+                    borderRadius="12px"
+                    width="100%"
+                    onLoad={() => setImageLoaded(true)}
+                  />
+                </Box>
+              </Skeleton>
+            ) : null}
             <Box marginTop="20px" width="80%" fontSize="small">
               <Flex justifyContent="space-between" alignItems="center">
                 {actions({

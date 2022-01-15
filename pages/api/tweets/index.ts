@@ -9,9 +9,14 @@ const handler = nc({
   onError,
 });
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  let tweets;
+  let tweets: any[];
   try {
     tweets = await prisma.tweet.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
       include: {
         User: {
           select: {
@@ -49,8 +54,8 @@ handler.post(
     async (req: NextApiRequest, res: NextApiResponse, user: User) => {
       const { content } = req.body;
       if (!content.length) {
-        res.status(204);
-        res.json({ error: "No content provided" });
+        res.status(204).end();
+        return;
       }
       let tweet;
       try {

@@ -38,7 +38,11 @@ const Feed = ({ children }) => {
           Home
         </Text>
       </Box>
-      <Skeleton isLoaded={!isLoading || isError}>
+      <Skeleton
+        startColor="gray.900"
+        endColor="black"
+        isLoaded={!isLoading || isError}
+      >
         <Box padding="20px" borderBottom="2px solid" borderColor="gray.800">
           <Flex width="100%">
             <Box mr="15px">
