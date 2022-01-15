@@ -11,11 +11,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     user = await prisma.user.findUnique({
       where: {
         email,
+        username,
       },
     });
 
     if (user) {
-      res.status(204);
+      res.status(409);
       res.json({ error: "User already exist" });
     } else {
       user = await prisma.user.create({
@@ -41,7 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           "Set-Cookie",
           cookie.serialize("TWITTER_ACCESS_TOKEN", token, {
             httpOnly: true,
-            maxAge: 8 * 60 * 60,
+            maxAge: 6 * 60 * 60,
             path: "/",
             sameSite: "lax",
             secure: process.env.NODE_ENV === "production",
@@ -51,7 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(200);
         res.json({ user });
       } else {
-        res.status(401);
+        res.status(400);
         res.json({ error: "Unable to register" });
       }
     }
