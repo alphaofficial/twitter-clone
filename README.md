@@ -2,6 +2,10 @@
 
 A fullstack clone of [twitter](https://twitter.com)
 
+## Preview
+
+Live preview can be found here [twitter-clone](https://twitter-clone-two-alpha.vercel.app/)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
