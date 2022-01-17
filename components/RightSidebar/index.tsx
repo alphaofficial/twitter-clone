@@ -7,6 +7,10 @@ import UserFollowCard from "../UserFollowCard";
 
 const RightSidebar = () => {
   const { users, isLoading } = useUsers();
+
+  const handleUserFollow = (user: User) => {};
+  const handleUserUnFollow = (user: User) => {};
+
   return (
     <Box>
       <Box
