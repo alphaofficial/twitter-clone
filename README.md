@@ -69,5 +69,5 @@ The project should now be available at http://localhost:3000
 ## Technologies used
 
 - Next JS (React)
-- Prisma
+- Prisma / Mongodb
 - Chakra UI
