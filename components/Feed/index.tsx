@@ -1,3 +1,5 @@
+import { mutate } from "swr";
+import { nanoid } from "nanoid";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import {
   Avatar,
@@ -10,17 +12,32 @@ import {
 import React, { useState } from "react";
 import { VscSmiley } from "react-icons/vsc";
 import { fetcher } from "@/lib/fetcher";
-import { useUser } from "@/lib/hooks";
+import { useTweets, useUser } from "@/lib/hooks";
 
 const totalCount = 280;
 
 const Feed = ({ children }) => {
+  const { tweets } = useTweets();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
 
   const handleTweet = async () => {
     setContent("");
-    await fetcher("tweets", { content });
+    const tweet = {
+      _id: nanoid(12),
+      content,
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
+      imageSrc: [],
+      likes: [],
+      retweets: [],
+    };
+    // update the local data immediately, but disable the revalidation
+    mutate("tweets", { ...tweets, tweet }, false);
+    // send a request to the API to update the source
+    await fetcher("tweets", tweet);
+    // trigger a revalidation (refetch) to make sure our local data is correct
+    mutate("tweets");
   };
 
   return (
