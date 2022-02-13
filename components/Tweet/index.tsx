@@ -65,25 +65,26 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
       name: "reply",
       icon: (color: string) => renderIcon({ icon: "reply", color }),
       number: null,
-      handler: tweetOperations("REPLY"),
+      handler: () => tweetOperations("REPLY"),
     },
     {
       name: "retweet",
       icon: (color: string) => renderIcon({ icon: "retweet", color }),
       number: retweets,
-      handler: tweetOperations(userRetweeted ? "RETWEET" : "UNDO_RETWEET"),
+      handler: () =>
+        tweetOperations(userRetweeted ? "RETWEET" : "UNDO_RETWEET"),
     },
     {
       name: "like",
       icon: (color: string) => renderIcon({ icon: "like", color }),
       number: likes,
-      handler: tweetOperations(userLiked ? "LIKE_TWEET" : "UNLIKE_TWEET"),
+      handler: () => tweetOperations(userLiked ? "LIKE_TWEET" : "UNLIKE_TWEET"),
     },
     {
       name: "share",
       icon: (color: string) => renderIcon({ icon: "share", color }),
       number: null,
-      handler: tweetOperations("SHARE"),
+      handler: () => tweetOperations("SHARE"),
     },
   ];
 
