@@ -41,9 +41,11 @@ handler.post(
 
             if (operation.acknowledged) {
               res.status(200);
+              return;
             }
             throw new Error("Failed to like tweet");
           } catch (error) {
+            console.log({ error });
             res.status(500);
             res.json({ error: error.message });
           }
@@ -54,12 +56,14 @@ handler.post(
               req.query.id as string,
               user._id
             );
-
             if (operation.acknowledged) {
               res.status(200);
+              return;
             }
-            throw new Error("Failed to like tweet");
+            throw new Error("Failed to undo like");
           } catch (error) {
+            console.log({ error });
+
             res.status(500);
             res.json({ error: error.message });
           }
@@ -70,9 +74,12 @@ handler.post(
 
             if (operation.acknowledged) {
               res.status(200);
+              return;
             }
-            throw new Error("Failed to like tweet");
+            throw new Error("Failed to retweet");
           } catch (error) {
+            console.log({ error });
+
             res.status(500);
             res.json({ error: error.message });
           }
@@ -86,9 +93,12 @@ handler.post(
 
             if (operation.acknowledged) {
               res.status(200);
+              return;
             }
-            throw new Error("Failed to like tweet");
+            throw new Error("Failed to undo retweet");
           } catch (error) {
+            console.log({ error });
+
             res.status(500);
             res.json({ error: error.message });
           }

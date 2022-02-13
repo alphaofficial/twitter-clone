@@ -7,7 +7,7 @@ import { AiOutlineRetweet, AiTwotoneHeart } from "react-icons/ai";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Avatar, IconButton, Image, Skeleton } from "@chakra-ui/react";
 import { fetcher } from "@/lib/fetcher";
-import { useUser } from "@/lib/hooks";
+import { useTweets, useUser } from "@/lib/hooks";
 
 const renderIcon = ({ icon, color, size = 15 }) => {
   const iconTypes: { [key: string]: any } = {
@@ -22,6 +22,7 @@ const renderIcon = ({ icon, color, size = 15 }) => {
 
 const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   const { user } = useUser();
+  const { tweets } = useTweets();
   const [userLiked, setUserLiked] = useState<boolean>(false);
   const [userRetweeted, setUserRetweeted] = useState(false);
   const [hasActed, setHasActed] = useState(false);
@@ -32,32 +33,41 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   );
 
   const tweetOperations = (operation: string) => {
+    const tweetIndex = tweets.findIndex((t) => t._id === tweet._id);
     const actions = {
       LIKE_TWEET: () => {
         setUserLiked(true);
         setLikes((prevState) => prevState + 1);
+        tweets[tweetIndex].likes += 1;
+        mutate("tweets", tweets, false);
         fetcher(`tweets/${tweet._id}`, { action: "like" });
       },
       UNDO_LIKE_TWEET: () => {
         setUserLiked(false);
         setLikes((prevState) => prevState - 1);
+        tweets[tweetIndex].likes -= 1;
+        mutate("tweets", tweets, false);
         fetcher(`tweets/${tweet._id}`, { action: "undoLike" });
       },
       RETWEET: () => {
         setUserRetweeted(true);
         setRetweets((prevState) => prevState + 1);
+        tweets[tweetIndex].retweets += 1;
+        mutate("tweets", tweets, false);
         fetcher(`tweets/${tweet._id}`, { action: "retweet" });
       },
       UNDO_RETWEET: () => {
         setUserRetweeted(false);
         setRetweets((prevState) => prevState - 1);
+        tweets[tweetIndex].retweets -= 1;
+        mutate("tweets", tweets, false);
         fetcher(`tweets/${tweet._id}`, { action: "undoRetweet" });
       },
       REPLY: () => null,
       SHARE: () => null,
     };
     setHasActed(true);
-    return actions[operation]();
+    return actions[operation] ? actions[operation]() : null;
   };
 
   const actions = [
@@ -78,7 +88,8 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
       name: "like",
       icon: (color: string) => renderIcon({ icon: "like", color }),
       number: likes,
-      handler: () => tweetOperations(userLiked ? "UNLIKE_TWEET" : "LIKE_TWEET"),
+      handler: () =>
+        tweetOperations(userLiked ? "UNDO_LIKE_TWEET" : "LIKE_TWEET"),
     },
     {
       name: "share",

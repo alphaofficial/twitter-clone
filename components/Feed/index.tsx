@@ -22,7 +22,6 @@ const Feed = ({ children }) => {
   const [content, setContent] = useState("");
 
   const handleTweet = async () => {
-    setContent("");
     const tweet = {
       _id: nanoid(12),
       content,
@@ -32,6 +31,7 @@ const Feed = ({ children }) => {
       likes: [],
       retweets: [],
     };
+    setContent("");
     // update the local data immediately, but disable the revalidation
     mutate("tweets", { ...tweets, tweet }, false);
     // send a request to the API to update the source
