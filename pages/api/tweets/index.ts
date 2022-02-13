@@ -1,5 +1,4 @@
 import nc from "next-connect";
-import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import onError from "@/middleware/error";
 import { validateRoute } from "@/lib/auth";
@@ -27,7 +26,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
 // create tweet
 handler.post(
   validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: User) => {
+    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
       const { content } = req.body;
       if (!content.length) {
         res.status(204).end();
