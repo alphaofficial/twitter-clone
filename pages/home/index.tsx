@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/layout";
 import PageLayout from "../../components/pageLayout";
 import Tweet from "../../components/Tweet";
+import { getTweets } from "../../db/resources/tweets";
 import { useTweets } from "../../lib/hooks";
 
 const Home = ({ fallback }) => {
@@ -17,16 +18,21 @@ const Home = ({ fallback }) => {
 };
 
 export const getServerSideProps = async () => {
-  const req = await fetch(`${process.env.API_HOST}/api/tweets`);
-  const tweets = await req.json();
-  if (tweets) {
-    return {
-      props: {
-        fallback: {
-          tweets,
+  let tweets = [];
+  try {
+    tweets = await getTweets();
+    if (tweets) {
+      return {
+        props: {
+          fallback: {
+            tweets,
+          },
         },
-      },
-    };
+      };
+    }
+    throw new Error("No tweets found");
+  } catch (error) {
+    console.log({ error });
   }
 };
 

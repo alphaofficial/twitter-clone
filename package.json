@@ -6,7 +6,8 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node seed/index.js"
   },
   "dependencies": {
     "@chakra-ui/layout": "^1.5.1",
@@ -18,6 +19,7 @@
     "bcrypt": "^5.0.1",
     "cookie": "^0.4.1",
     "cookies": "^0.8.0",
+    "dotenv": "^16.0.0",
     "easy-peasy": "^5.0.4",
     "emoji-picker-react": "^3.5.0",
     "format-duration": "^1.4.0",
@@ -25,6 +27,7 @@
     "framer-motion": "^4.1.17",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
+    "mongodb": "^4.3.1",
     "nanoid": "^3.1.30",
     "next": "12.0.7",
     "next-connect": "^0.11.0",

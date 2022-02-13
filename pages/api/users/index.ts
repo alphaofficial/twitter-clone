@@ -1,9 +1,8 @@
 import nc from "next-connect";
-import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
 import onError from "../../../middleware/error";
 import { validateRoute } from "../../../lib/auth";
+import { getOtherUsers } from "../../../db/resources/users";
 
 const handler = nc({
   onError,
@@ -11,22 +10,10 @@ const handler = nc({
 
 handler.get(
   validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: User) => {
+    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
       let users;
       try {
-        users = await prisma.user.findMany({
-          where: {
-            NOT: {
-              id: user.id,
-            },
-          },
-          select: {
-            firstname: true,
-            lastname: true,
-            username: true,
-            avatar: true,
-          },
-        });
+        users = await getOtherUsers(user._id);
         if (users) {
           res.status(200);
           res.json(users);

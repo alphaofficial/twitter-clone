@@ -1,44 +1,19 @@
 import nc from "next-connect";
 import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
 import onError from "../../../middleware/error";
 import { validateRoute } from "../../../lib/auth";
+import { createTweet, getTweets } from "../../../db/resources/tweets";
 
 const handler = nc({
   onError,
 });
+
+// get tweets
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   let tweets: any[];
   try {
-    tweets = await prisma.tweet.findMany({
-      orderBy: [
-        {
-          id: "desc",
-        },
-      ],
-      include: {
-        User: {
-          select: {
-            firstname: true,
-            lastname: true,
-            username: true,
-            avatar: true,
-          },
-        },
-        retweets: {
-          select: {
-            userId: true,
-          },
-        },
-        likes: {
-          select: {
-            userId: true,
-          },
-        },
-        replies: true,
-      },
-    });
+    tweets = await getTweets();
     if (tweets) {
       res.status(200);
       res.json(tweets);
@@ -49,6 +24,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 });
 
+// create tweet
 handler.post(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: User) => {
@@ -59,27 +35,7 @@ handler.post(
       }
       let tweet;
       try {
-        tweet = await prisma.tweet.create({
-          data: {
-            content,
-            userId: user.id,
-          },
-
-          include: {
-            User: {
-              select: {
-                firstname: true,
-                lastname: true,
-                username: true,
-                avatar: true,
-              },
-            },
-            replies: true,
-            likes: true,
-            retweets: true,
-          },
-        });
-
+        tweet = await createTweet({ content, user });
         if (tweet) {
           res.status(200);
           res.json({ tweet });

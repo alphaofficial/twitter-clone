@@ -48,7 +48,7 @@ const Login = () => {
   const stepOne = () => (
     <Box marginTop="20px" paddingX="30px">
       <Flex justifyContent="center" alignItems="center">
-        <Box width="80%">
+        <Box width={{ base: "80%", sm: "80%", md: "443px" }}>
           <Box marginBottom="40px" marginTop="20px">
             <Text fontSize="2xl" fontWeight="extrabold">
               Sign in to Twitter
@@ -148,7 +148,7 @@ const Login = () => {
   const stepTwo = () => (
     <Box marginTop="20px" paddingX="30px">
       <Flex alignItems="center">
-        <Box width="100%" paddingX="20px">
+        <Box width={{ base: "80%", sm: "80%", md: "443px" }} paddingX="20px">
           <Box marginBottom="40px" marginTop="20px">
             <Text fontSize="2xl" fontWeight="extrabold">
               Enter your password
@@ -233,7 +233,7 @@ const Login = () => {
     </Box>
   );
 
-  const renderStep = (step) => {
+  const renderStep = (step: number) => {
     switch (step) {
       case 1:
         return stepOne();
@@ -257,7 +257,7 @@ const Login = () => {
               padding="20px"
               position="relative"
               minHeight="40%"
-              overFlowY="auto"
+              overflowY="auto"
             >
               <Box>
                 <Box>

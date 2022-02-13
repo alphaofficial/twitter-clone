@@ -1,20 +1,17 @@
-import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "./prisma";
+import { getUserById } from "../db/resources/users";
 
 export const validateRoute =
   (handler: any) => async (req: NextApiRequest, res: NextApiResponse) => {
     const { TWITTER_ACCESS_TOKEN: token } = req.cookies;
     if (token) {
-      let user: User;
+      let user: any;
       try {
         const { id } = jwt.verify(token, process.env.JWT_SECRET) as {
-          id: number;
+          id: string;
         };
-        user = await prisma.user.findUnique({
-          where: { id },
-        });
+        user = await getUserById(id);
         if (!user) {
           throw new Error("User not found");
         }

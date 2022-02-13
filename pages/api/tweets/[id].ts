@@ -1,35 +1,18 @@
 import nc from "next-connect";
-import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
 import onError from "../../../middleware/error";
 import { validateRoute } from "../../../lib/auth";
+import { getTweet, likeTweet } from "../../../db/resources/tweets";
 
 const handler = nc({
   onError,
 });
+
+// get tweet
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   let tweet;
   try {
-    tweet = await prisma.tweet.findUnique({
-      where: {
-        id: +req.query.id,
-      },
-      include: {
-        User: {
-          select: {
-            firstname: true,
-            lastname: true,
-            username: true,
-            avatar: true,
-          },
-        },
-        replies: true,
-        likes: true,
-        retweets: true,
-      },
-    });
-
+    tweet = await getTweet(req.query.id as string);
     if (tweet) {
       res.status(200);
       res.json(tweet);
@@ -40,29 +23,40 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 });
 
+// like tweet
 handler.post(
   validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: User) => {
+    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
       const { action } = req.body;
       switch (action) {
         case "like":
           try {
             // create like
-            const likedTweet = await prisma.like.create({
-              data: {
-                userId: user.id,
-                tweetId: +req.query.id,
-              },
-              include: {
-                Tweet: true,
-              },
-            });
+            const likedTweet = await likeTweet(
+              req.query.id as string,
+              user._id
+            );
 
-            if (likedTweet) {
+            if (likedTweet.acknowledged) {
               res.status(200);
-              res.json({ likedTweet });
             }
-            throw new Error("No likes found");
+            throw new Error("Failed to like tweet");
+          } catch (error) {
+            res.status(500);
+            res.json({ error: error.message });
+          }
+          break;
+        case "unlike":
+          try {
+            const unLikedTweet = await likeTweet(
+              req.query.id as string,
+              user._id
+            );
+
+            if (unLikedTweet.acknowledged) {
+              res.status(200);
+            }
+            throw new Error("Failed to like tweet");
           } catch (error) {
             res.status(500);
             res.json({ error: error.message });
