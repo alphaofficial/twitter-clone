@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { VscSmiley } from "react-icons/vsc";
-import { fetcher } from "../../lib/fetcher";
-import { useUser } from "../../lib/hooks";
+import { fetcher } from "@/lib/fetcher";
+import { useUser } from "@/lib/hooks";
 
 const totalCount = 280;
 

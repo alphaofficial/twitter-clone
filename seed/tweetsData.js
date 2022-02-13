@@ -97,6 +97,9 @@ const tweetsData = [
     updatedAt: new Date().toDateString(),
     content: "Random tweet",
     user: "",
+    imageSrc: ["https://picsum.photos/id/237/200/300"],
+    likes: [],
+    retweets: [],
   },
   {
     _id: nanoid(12),

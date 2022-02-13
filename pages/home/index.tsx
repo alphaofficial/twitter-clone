@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/layout";
-import PageLayout from "../../components/pageLayout";
-import Tweet from "../../components/Tweet";
-import { getTweets } from "../../db/resources/tweets";
-import { useTweets } from "../../lib/hooks";
+import PageLayout from "@/components/PageLayout";
+import Tweet from "@/components/Tweet";
+import { getTweets } from "@/db/resources/tweets";
+import { useTweets } from "@/lib/hooks";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
@@ -10,7 +10,7 @@ const Home = ({ fallback }) => {
     <PageLayout>
       <Box>
         {tweets?.map((tweet: any) => (
-          <Tweet key={tweet.id} tweet={tweet} />
+          <Tweet key={tweet._id} tweet={tweet} />
         ))}
       </Box>
     </PageLayout>

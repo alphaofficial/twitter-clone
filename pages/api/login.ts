@@ -2,7 +2,7 @@ import brcypt from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
-import { getUser } from "../../db/resources/users";
+import { getUser } from "@/db/resources/users";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, password } = req.body;

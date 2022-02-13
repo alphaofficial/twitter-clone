@@ -1,9 +1,9 @@
 import nc from "next-connect";
 import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import onError from "../../../middleware/error";
-import { validateRoute } from "../../../lib/auth";
-import { createTweet, getTweets } from "../../../db/resources/tweets";
+import onError from "@/middleware/error";
+import { validateRoute } from "@/lib/auth";
+import { createTweet, getTweets } from "@/db/resources/tweets";
 
 const handler = nc({
   onError,

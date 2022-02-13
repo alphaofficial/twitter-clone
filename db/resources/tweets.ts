@@ -14,10 +14,34 @@ export const getTweets = async () => {
 
 export const likeTweet = async (tweetId: string, user: string) => {
   const { db } = await connectToDB();
-  const likedTweet = await db
+  const operation = await db
     .collection("tweets")
     .updateOne({ _id: tweetId }, { $push: { likes: user } });
-  return likedTweet;
+  return operation;
+};
+
+export const unLikeTweet = async (tweetId: string, user: string) => {
+  const { db } = await connectToDB();
+  const operation = await db
+    .collection("tweets")
+    .updateOne({ _id: tweetId }, { $pull: { likes: user } });
+  return operation;
+};
+
+export const retweet = async (tweetId: string, user: string) => {
+  const { db } = await connectToDB();
+  const operation = await db
+    .collection("tweets")
+    .updateOne({ _id: tweetId }, { $push: { retweets: user } });
+  return operation;
+};
+
+export const undoRetwweet = async (tweetId: string, user: string) => {
+  const { db } = await connectToDB();
+  const operation = await db
+    .collection("tweets")
+    .updateOne({ _id: tweetId }, { $pull: { retweets: user } });
+  return operation;
 };
 
 export const createTweet = async (tweet: any) => {

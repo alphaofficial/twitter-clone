@@ -20,8 +20,8 @@ import { useRouter } from "next/router";
 import SimpleBar from "simplebar-react";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { isValidEmail } from "../../lib/validators";
-import { auth } from "../../lib/mutations";
+import { isValidEmail } from "@/lib/validators";
+import { auth } from "@/lib/mutations";
 
 const Login = () => {
   const [email, setEmail] = useState("alphaxsalt@gmail.com");

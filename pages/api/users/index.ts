@@ -1,8 +1,8 @@
 import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
-import onError from "../../../middleware/error";
-import { validateRoute } from "../../../lib/auth";
-import { getOtherUsers } from "../../../db/resources/users";
+import onError from "@/middleware/error";
+import { validateRoute } from "@/lib/auth";
+import { getOtherUsers } from "@/db/resources/users";
 
 const handler = nc({
   onError,

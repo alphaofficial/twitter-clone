@@ -2,7 +2,7 @@ import brcypt from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
-import { createUser, getUser } from "../../db/resources/users";
+import { createUser, getUser } from "@/db/resources/users";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, password, username, avatar, firstname, lastname } = req.body;
@@ -22,7 +22,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         username,
         avatar: avatar || "https://i.pravatar.cc/300",
       });
-      console.log({ user });
 
       if (user) {
         const token = jwt.sign(

@@ -2,14 +2,14 @@ import { Box, Text, Center } from "@chakra-ui/layout";
 import { Input, InputGroup, InputLeftElement, Spinner } from "@chakra-ui/react";
 import { User } from "@prisma/client";
 import { IoMdSearch } from "react-icons/io";
-import { useUsers } from "../../lib/hooks";
+import { useUsers } from "@/lib/hooks";
 import UserFollowCard from "../UserFollowCard";
 
 const RightSidebar = () => {
   const { users, isLoading } = useUsers();
 
-  const handleUserFollow = (user: User) => {};
-  const handleUserUnFollow = (user: User) => {};
+  // const handleUserFollow = (user: User) => {};
+  // const handleUserUnFollow = (user: User) => {};
 
   return (
     <Box>

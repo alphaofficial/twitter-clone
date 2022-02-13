@@ -1,8 +1,14 @@
 import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
-import onError from "../../../middleware/error";
-import { validateRoute } from "../../../lib/auth";
-import { getTweet, likeTweet } from "../../../db/resources/tweets";
+import onError from "@/middleware/error";
+import { validateRoute } from "@/lib/auth";
+import {
+  getTweet,
+  likeTweet,
+  retweet,
+  undoRetwweet,
+  unLikeTweet,
+} from "@/db/resources/tweets";
 
 const handler = nc({
   onError,
@@ -23,7 +29,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 });
 
-// like tweet
+//  tweet operations
 handler.post(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
@@ -31,13 +37,9 @@ handler.post(
       switch (action) {
         case "like":
           try {
-            // create like
-            const likedTweet = await likeTweet(
-              req.query.id as string,
-              user._id
-            );
+            const operation = await likeTweet(req.query.id as string, user._id);
 
-            if (likedTweet.acknowledged) {
+            if (operation.acknowledged) {
               res.status(200);
             }
             throw new Error("Failed to like tweet");
@@ -46,14 +48,14 @@ handler.post(
             res.json({ error: error.message });
           }
           break;
-        case "unlike":
+        case "undoLike":
           try {
-            const unLikedTweet = await likeTweet(
+            const operation = await unLikeTweet(
               req.query.id as string,
               user._id
             );
 
-            if (unLikedTweet.acknowledged) {
+            if (operation.acknowledged) {
               res.status(200);
             }
             throw new Error("Failed to like tweet");
@@ -62,7 +64,35 @@ handler.post(
             res.json({ error: error.message });
           }
           break;
+        case "retweet":
+          try {
+            const operation = await retweet(req.query.id as string, user._id);
 
+            if (operation.acknowledged) {
+              res.status(200);
+            }
+            throw new Error("Failed to like tweet");
+          } catch (error) {
+            res.status(500);
+            res.json({ error: error.message });
+          }
+          break;
+        case "undoRetweet":
+          try {
+            const operation = await undoRetwweet(
+              req.query.id as string,
+              user._id
+            );
+
+            if (operation.acknowledged) {
+              res.status(200);
+            }
+            throw new Error("Failed to like tweet");
+          } catch (error) {
+            res.status(500);
+            res.json({ error: error.message });
+          }
+          break;
         default:
           throw new Error("Invalid action");
       }
