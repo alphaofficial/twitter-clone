@@ -23,17 +23,19 @@ const Feed = ({ children }) => {
 
   const handleTweet = async () => {
     const tweet = {
-      _id: nanoid(12),
       content,
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString(),
       imageSrc: [],
       likes: [],
       retweets: [],
+      user: user._id,
     };
-    setContent("");
+
     // update the local data immediately, but disable the revalidation
-    mutate("tweets", { ...tweets, tweet }, false);
+    const tweetWithId = { ...tweet, _id: nanoid(12) };
+    mutate("tweets", { ...tweets, tweetWithId }, false);
+    setContent("");
     // send a request to the API to update the source
     await fetcher("tweets", tweet);
     // trigger a revalidation (refetch) to make sure our local data is correct

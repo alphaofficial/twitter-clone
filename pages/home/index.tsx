@@ -3,9 +3,11 @@ import PageLayout from "@/components/PageLayout";
 import Tweet from "@/components/Tweet";
 import { getTweets } from "@/db/resources/tweets";
 import { useTweets } from "@/lib/hooks";
+import { serialize } from "@/lib/serialize";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
+
   return (
     <PageLayout>
       <Box>
@@ -21,16 +23,17 @@ export const getServerSideProps = async () => {
   let tweets = [];
   try {
     tweets = await getTweets();
-    if (tweets) {
-      return {
-        props: {
-          fallback: {
-            tweets,
-          },
-        },
-      };
+    console.log({ tweets });
+    if (!tweets) {
+      throw new Error("No tweets found");
     }
-    throw new Error("No tweets found");
+    return {
+      props: {
+        fallback: {
+          tweets: serialize(tweets),
+        },
+      },
+    };
   } catch (error) {
     console.log({ error });
   }

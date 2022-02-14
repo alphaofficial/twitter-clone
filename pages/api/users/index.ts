@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import onError from "@/middleware/error";
 import { validateRoute } from "@/lib/auth";
 import { getOtherUsers } from "@/db/resources/users";
+import { serialize } from "@/lib/serialize";
 
 const handler = nc({
   onError,
@@ -11,17 +12,16 @@ const handler = nc({
 handler.get(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
-      let users;
+      let users = [];
       try {
         users = await getOtherUsers(user._id);
-        if (users) {
-          res.status(200);
-          res.json(users);
+        if (!users || !users.length) {
+          throw new Error("No tweets found");
         }
-        throw new Error("No tweets found");
+        res.status(200);
+        res.json({ users: serialize(users) });
       } catch (error) {
         res.status(204);
-        res.json({ error: error.message });
       }
     }
   )

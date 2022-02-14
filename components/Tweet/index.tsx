@@ -75,7 +75,7 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
       name: "reply",
       icon: (color: string) => renderIcon({ icon: "reply", color }),
       number: null,
-      handler: () => tweetOperations("REPLY"),
+      handler: () => () => tweetOperations("REPLY"),
     },
     {
       name: "retweet",
@@ -117,8 +117,8 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
 
   useEffect(() => {
     if (tweet && user) {
-      const liked = tweet.likes.includes(user._id);
-      const retweeted = tweet.retweets.includes(user._id);
+      const liked = tweet?.likes?.includes(user._id);
+      const retweeted = tweet?.retweets?.includes(user._id);
       setUserLiked(liked);
       setUserRetweeted(retweeted);
     }
