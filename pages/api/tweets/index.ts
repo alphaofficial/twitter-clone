@@ -36,28 +36,26 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
 
 // create tweet
 handler.post(
-  validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
-      const { content } = req.body;
-      if (!content.length) {
-        res.status(204).end();
-        return;
-      }
-      let tweet;
-      try {
-        tweet = await createTweet({ content, user });
-        if (tweet) {
-          res.status(200);
-          res.json({ tweet });
-        }
-        throw new Error("Unable to create tweet");
-      } catch (error) {
-        console.log({ error });
-        res.status(500);
-        res.json({ error: error.message });
-      }
+  validateRoute(async (req: NextApiRequest, res: NextApiResponse) => {
+    const { content } = req.body;
+    if (!content.length) {
+      res.status(204).end();
+      return;
     }
-  )
+    let tweet;
+    try {
+      tweet = await createTweet(req.body);
+      if (tweet) {
+        res.status(200);
+        res.json({ tweet });
+      }
+      throw new Error("Unable to create tweet");
+    } catch (error) {
+      console.log({ error });
+      res.status(500);
+      res.json({ error: error.message });
+    }
+  })
 );
 
 export default handler;

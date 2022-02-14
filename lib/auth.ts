@@ -18,6 +18,7 @@ export const validateRoute =
       } catch (error) {
         res.status(401);
         res.redirect("/");
+        return;
       }
     }
     res.status(401);

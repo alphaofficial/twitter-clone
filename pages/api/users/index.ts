@@ -12,11 +12,12 @@ const handler = nc({
 handler.get(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
+      console.log({ user });
       let users = [];
       try {
         users = await getOtherUsers(user._id);
-        if (!users || !users.length) {
-          throw new Error("No tweets found");
+        if (!users) {
+          throw new Error("No users found");
         }
         res.status(200);
         res.json({ users: serialize(users) });

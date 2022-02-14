@@ -8,6 +8,7 @@ import {
   IconButton,
   Skeleton,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { VscSmiley } from "react-icons/vsc";
@@ -20,6 +21,9 @@ const Feed = ({ children }) => {
   const { tweets } = useTweets();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
+
+  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+  const bg = useColorModeValue("white", "rgba(0, 0, 0, 0.65)");
 
   const handleTweet = async () => {
     const tweet = {
@@ -48,7 +52,7 @@ const Feed = ({ children }) => {
         padding="20px"
         position="sticky"
         top="0"
-        bg="rgba(0, 0, 0, 0.65);"
+        bg={bg}
         backdropFilter="blur(12px)"
         width="100%"
         zIndex="1"
@@ -62,7 +66,7 @@ const Feed = ({ children }) => {
         endColor="black"
         isLoaded={!isLoading || isError}
       >
-        <Box padding="20px" borderBottom="2px solid" borderColor="gray.800">
+        <Box padding="20px" borderBottom="1px solid" borderColor={borderColor}>
           <Flex width="100%">
             <Box mr="15px">
               <Avatar

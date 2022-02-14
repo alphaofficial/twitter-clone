@@ -22,6 +22,5 @@ export const useUsers = () => {
 // get tweets
 export const useTweets = (fallback = {}) => {
   const { data, error } = useSWR("tweets", fetcher, { fallback });
-  console.log({ data, error });
   return { tweets: data, isLoading: !data && !error, isError: error };
 };

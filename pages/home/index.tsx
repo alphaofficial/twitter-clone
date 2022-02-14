@@ -7,13 +7,13 @@ import { serialize } from "@/lib/serialize";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
-
+  console.log({ tweets });
   return (
     <PageLayout>
       <Box>
-        {tweets?.map((tweet: any) => (
-          <Tweet key={tweet._id} tweet={tweet} />
-        ))}
+        {tweets && tweets.length
+          ? tweets?.map((tweet: any) => <Tweet key={tweet._id} tweet={tweet} />)
+          : null}
       </Box>
     </PageLayout>
   );
@@ -23,7 +23,6 @@ export const getServerSideProps = async () => {
   let tweets = [];
   try {
     tweets = await getTweets();
-    console.log({ tweets });
     if (!tweets) {
       throw new Error("No tweets found");
     }

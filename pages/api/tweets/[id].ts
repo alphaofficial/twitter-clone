@@ -38,7 +38,6 @@ handler.post(
         case "like":
           try {
             const operation = await likeTweet(req.query.id as string, user._id);
-
             if (operation.acknowledged) {
               res.status(200);
               return;

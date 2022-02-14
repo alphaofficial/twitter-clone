@@ -5,7 +5,13 @@ import { BsChatRight } from "react-icons/bs";
 import { FiShare } from "react-icons/fi";
 import { AiOutlineRetweet, AiTwotoneHeart } from "react-icons/ai";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Avatar, IconButton, Image, Skeleton } from "@chakra-ui/react";
+import {
+  Avatar,
+  IconButton,
+  Image,
+  Skeleton,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { fetcher } from "@/lib/fetcher";
 import { useTweets, useUser } from "@/lib/hooks";
 
@@ -32,6 +38,8 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
     tweet?.retweets?.length || 0
   );
 
+  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+
   const tweetOperations = (operation: string) => {
     const tweetIndex = tweets.findIndex((t) => t._id === tweet._id);
     const actions = {
@@ -42,12 +50,12 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
         mutate("tweets", tweets, false);
         fetcher(`tweets/${tweet._id}`, { action: "like" });
       },
-      UNDO_LIKE_TWEET: () => {
+      UNDO_LIKE_TWEET: async () => {
         setUserLiked(false);
         setLikes((prevState) => prevState - 1);
         tweets[tweetIndex].likes -= 1;
         mutate("tweets", tweets, false);
-        fetcher(`tweets/${tweet._id}`, { action: "undoLike" });
+        await fetcher(`tweets/${tweet._id}`, { action: "undoLike" });
       },
       RETWEET: () => {
         setUserRetweeted(true);
@@ -75,7 +83,7 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
       name: "reply",
       icon: (color: string) => renderIcon({ icon: "reply", color }),
       number: null,
-      handler: () => () => tweetOperations("REPLY"),
+      handler: () => tweetOperations("REPLY"),
     },
     {
       name: "retweet",
@@ -132,8 +140,8 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
         },
       }}
       padding="20px"
-      borderBottom="2px solid"
-      borderColor="gray.800"
+      borderBottom="1px solid"
+      borderColor={borderColor}
     >
       <Box>
         <Flex>

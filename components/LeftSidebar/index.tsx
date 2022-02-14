@@ -6,9 +6,12 @@ import { BiUser } from "react-icons/bi";
 import { FaRegEnvelope, FaBookmark } from "react-icons/fa";
 import { BsCardText } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
-import { Avatar, Button } from "@chakra-ui/react";
+import { Avatar, Button, useColorModeValue } from "@chakra-ui/react";
+import { useUser } from "@/lib/hooks";
 
 const LeftSidebar = () => {
+  const { user } = useUser();
+  const twitterSrc = useColorModeValue("/twitter-blue.png", "/twitter.png");
   const menuItems = [
     {
       name: "Home",
@@ -51,11 +54,16 @@ const LeftSidebar = () => {
       link: "/more",
     },
   ];
+  const hoverColor = useColorModeValue(
+    "rgba(15,20,21,0.1)",
+    "rgba(217,217,217,0.1)"
+  );
+  const btnColor = useColorModeValue("white", "black");
   return (
     <Box paddingTop="20px" height="100vh" position="relative">
       <Box marginBottom="20px">
         <Box paddingY="10px" paddingX="15px">
-          <NextImage src="/twitter.png" width={25} height={25} />
+          <NextImage src={twitterSrc} width={25} height={25} />
         </Box>
         <Box marginTop="20px">
           {menuItems.map((item) => (
@@ -67,7 +75,7 @@ const LeftSidebar = () => {
               width="max-content"
               sx={{
                 "&:hover": {
-                  bg: "rgba(217,217,217,0.1)",
+                  bg: hoverColor,
                   borderRadius: "24px",
                 },
               }}
@@ -97,6 +105,7 @@ const LeftSidebar = () => {
                 bg: "twitter.700",
               },
             }}
+            color={btnColor}
           >
             Tweet
           </Button>
@@ -107,7 +116,7 @@ const LeftSidebar = () => {
           <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
           <Box ml="10px">
             <Text fontSize="20px" color="gray.500">
-              @username
+              @{user?.username || ""}
             </Text>
           </Box>
         </Flex>
