@@ -184,8 +184,8 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
               >
                 <Box width="100%" height={imageLoaded ? "auto" : "max-content"}>
                   <Image
-                    border="2px solid"
-                    borderColor="gray.800"
+                    border="1px solid"
+                    borderColor={borderColor}
                     src={tweet.imageSrc[0]}
                     borderRadius="12px"
                     width="100%"

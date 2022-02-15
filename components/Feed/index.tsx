@@ -41,7 +41,7 @@ const Feed = ({ children }) => {
       likes: [],
       retweets: [],
     };
-    mutate("tweets", { tweetWithId, ...tweets }, false);
+    //mutate("tweets", { ...tweets }, false);
     setContent("");
     // send a request to the API to update the source
     await fetcher("tweets", tweet);
