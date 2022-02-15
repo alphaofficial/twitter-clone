@@ -7,13 +7,12 @@ import { serialize } from "@/lib/serialize";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
-  console.log({ tweets });
   return (
     <PageLayout>
       <Box>
-        {tweets && tweets.length
-          ? tweets?.map((tweet: any) => <Tweet key={tweet._id} tweet={tweet} />)
-          : null}
+        {tweets?.map((tweet: any) => (
+          <Tweet key={tweet._id} tweet={tweet} />
+        ))}
       </Box>
     </PageLayout>
   );

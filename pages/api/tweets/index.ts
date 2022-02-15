@@ -26,7 +26,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         })
       );
       res.status(200);
-      res.json({ tweets: serialize(tweets) });
+      res.json({ data: serialize(tweets) });
     }
     throw new Error("No tweets found");
   } catch (error) {
@@ -42,12 +42,12 @@ handler.post(
       res.status(204).end();
       return;
     }
-    let tweet;
     try {
-      tweet = await createTweet(req.body);
-      if (tweet) {
+      const tweet = await createTweet(req.body);
+      if (tweet.acknowledged) {
         res.status(200);
-        res.json({ tweet });
+        res.json({ data: tweet });
+        return;
       }
       throw new Error("Unable to create tweet");
     } catch (error) {

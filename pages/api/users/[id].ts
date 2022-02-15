@@ -16,7 +16,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       throw new Error("No tweets found");
     }
     res.status(200);
-    res.json(user);
+    res.json({ data: user });
   } catch (error) {
     res.status(204);
   }

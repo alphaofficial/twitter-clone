@@ -46,9 +46,12 @@ export const undoRetwweet = async (tweetId: string, user: string) => {
 
 export const createTweet = async (tweet: any) => {
   const { db } = await connectToDB();
-  await db.collection("tweets").insertOne({
+  const operation = await db.collection("tweets").insertOne({
     ...tweet,
     createdAt: new Date().toDateString(),
     updatedAt: new Date().toDateString(),
+    likes: [],
+    retweets: [],
   });
+  return operation;
 };

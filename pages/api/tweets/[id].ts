@@ -21,7 +21,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     tweet = await getTweet(req.query.id as string);
     if (tweet) {
       res.status(200);
-      res.json(tweet);
+      res.json({ data: tweet });
     }
     throw new Error("No tweets found");
   } catch (error) {

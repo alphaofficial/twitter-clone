@@ -54,12 +54,11 @@ const RightSidebar = () => {
                 Who to follow
               </Text>
             </Box>
-            {isLoading ? (
+            {isLoading || !users ? (
               <Center width="100%" height="200">
                 <Spinner />
               </Center>
             ) : (
-              users?.length &&
               users?.map((user: any) => (
                 <UserFollowCard
                   key={user.username}

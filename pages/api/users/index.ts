@@ -20,7 +20,7 @@ handler.get(
           throw new Error("No users found");
         }
         res.status(200);
-        res.json({ users: serialize(users) });
+        res.json({ data: serialize(users) });
       } catch (error) {
         res.status(204);
       }

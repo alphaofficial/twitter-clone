@@ -12,7 +12,7 @@ handler.get(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
       console.log({ user });
       res.status(200);
-      res.json(user);
+      res.json({ data: user });
     }
   )
 );
