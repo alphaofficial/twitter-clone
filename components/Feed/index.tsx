@@ -1,3 +1,4 @@
+import { mutate } from "swr";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import {
   Avatar,
@@ -6,21 +7,34 @@ import {
   IconButton,
   Skeleton,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { VscSmiley } from "react-icons/vsc";
-import { fetcher } from "../../lib/fetcher";
-import { useUser } from "../../lib/hooks";
+import { fetcher } from "@/lib/fetcher";
+import { useUser } from "@/lib/hooks";
 
 const totalCount = 280;
 
 const Feed = ({ children }) => {
+  // const { tweets } = useTweets();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
 
+  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+  const bg = useColorModeValue("white", "rgba(0, 0, 0, 0.65)");
+
   const handleTweet = async () => {
+    const tweet = {
+      content,
+      imageSrc: [],
+      user: user._id,
+    };
     setContent("");
-    await fetcher("tweets", { content });
+    // send a request to the API to update the source
+    await fetcher("tweets", tweet);
+    // trigger a revalidation (refetch) to make sure our local data is correct
+    mutate("tweets");
   };
 
   return (
@@ -29,7 +43,7 @@ const Feed = ({ children }) => {
         padding="20px"
         position="sticky"
         top="0"
-        bg="rgba(0, 0, 0, 0.65);"
+        bg={bg}
         backdropFilter="blur(12px)"
         width="100%"
         zIndex="1"
@@ -43,7 +57,7 @@ const Feed = ({ children }) => {
         endColor="black"
         isLoaded={!isLoading || isError}
       >
-        <Box padding="20px" borderBottom="2px solid" borderColor="gray.800">
+        <Box padding="20px" borderBottom="1px solid" borderColor={borderColor}>
           <Flex width="100%">
             <Box mr="15px">
               <Avatar

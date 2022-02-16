@@ -1,9 +1,9 @@
 import nc from "next-connect";
-import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
-import onError from "../../../middleware/error";
-import { validateRoute } from "../../../lib/auth";
+import onError from "@/middleware/error";
+import { validateRoute } from "@/lib/auth";
+import { getOtherUsers } from "@/db/resources/users";
+import { serialize } from "@/lib/serialize";
 
 const handler = nc({
   onError,
@@ -11,30 +11,17 @@ const handler = nc({
 
 handler.get(
   validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: User) => {
-      let users;
+    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
+      let users = [];
       try {
-        users = await prisma.user.findMany({
-          where: {
-            NOT: {
-              id: user.id,
-            },
-          },
-          select: {
-            firstname: true,
-            lastname: true,
-            username: true,
-            avatar: true,
-          },
-        });
-        if (users) {
-          res.status(200);
-          res.json(users);
+        users = await getOtherUsers(user._id);
+        if (!users) {
+          throw new Error("No users found");
         }
-        throw new Error("No tweets found");
+        res.status(200);
+        res.json({ data: serialize(users) });
       } catch (error) {
         res.status(204);
-        res.json({ error: error.message });
       }
     }
   )

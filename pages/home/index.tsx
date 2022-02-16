@@ -1,7 +1,9 @@
 import { Box } from "@chakra-ui/layout";
-import PageLayout from "../../components/pageLayout";
-import Tweet from "../../components/Tweet";
-import { useTweets } from "../../lib/hooks";
+import PageLayout from "@/components/PageLayout";
+import Tweet from "@/components/Tweet";
+import { getTweets } from "@/db/resources/tweets";
+import { useTweets } from "@/lib/hooks";
+import { serialize } from "@/lib/serialize";
 
 const Home = ({ fallback }) => {
   const { tweets } = useTweets(fallback);
@@ -9,7 +11,7 @@ const Home = ({ fallback }) => {
     <PageLayout>
       <Box>
         {tweets?.map((tweet: any) => (
-          <Tweet key={tweet.id} tweet={tweet} />
+          <Tweet key={tweet._id} tweet={tweet} />
         ))}
       </Box>
     </PageLayout>
@@ -17,16 +19,21 @@ const Home = ({ fallback }) => {
 };
 
 export const getServerSideProps = async () => {
-  const req = await fetch(`${process.env.API_HOST}/api/tweets`);
-  const tweets = await req.json();
-  if (tweets) {
+  let tweets = [];
+  try {
+    tweets = await getTweets();
+    if (!tweets) {
+      throw new Error("No tweets found");
+    }
     return {
       props: {
         fallback: {
-          tweets,
+          tweets: serialize(tweets),
         },
       },
     };
+  } catch (error) {
+    console.log({ error });
   }
 };
 

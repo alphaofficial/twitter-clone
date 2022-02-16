@@ -17,7 +17,6 @@ export default function middleware(req: NextRequest) {
     if (token) {
       return NextResponse.redirect("/home");
     }
-    return;
   }
   if (signedinPages.find((p) => p === req.nextUrl.pathname)) {
     const token = req.cookies.TWITTER_ACCESS_TOKEN;

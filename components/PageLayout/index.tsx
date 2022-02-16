@@ -1,12 +1,17 @@
 import { Box, Flex, Container } from "@chakra-ui/layout";
+import { useColorModeValue } from "@chakra-ui/react";
 import SimpleBar from "simplebar-react";
 import LeftSidebar from "../LeftSidebar";
 import RightSidebar from "../RightSidebar";
 import Feed from "../Feed";
 
 const PageLayout = ({ children }) => {
+  const bg = useColorModeValue("white", "black");
+  const color = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+
   return (
-    <Box bg="black" color="white" height="100vh">
+    <Box bg={bg} color={color} height="100vh">
       <Container maxW="container.xl">
         <Flex justifyContent="space-between">
           <Box width="300px">
@@ -15,9 +20,9 @@ const PageLayout = ({ children }) => {
           <Box
             width="calc(100% - 620px)"
             overflow="scroll"
-            borderLeft="2px solid"
-            borderRight="2px solid"
-            borderColor="gray.800"
+            borderLeft="1px solid"
+            borderRight="1px solid"
+            borderColor={borderColor}
           >
             <SimpleBar style={{ height: "100vh" }}>
               <Feed>{children}</Feed>

@@ -1,85 +1,116 @@
-import { Box, Flex, Text } from "@chakra-ui/layout";
-import { FC, useEffect, useState } from "react";
-import { Avatar, IconButton, Image, Skeleton } from "@chakra-ui/react";
-import { BsChatRight } from "react-icons/bs";
-import { AiOutlineRetweet } from "react-icons/ai";
-import { FiShare, FiHeart } from "react-icons/fi";
+import { mutate } from "swr";
 import moment from "moment";
-import { fetcher } from "../../lib/fetcher";
-import { useUser } from "../../lib/hooks";
-import { ITweet } from "../../types";
+import { FC, useEffect, useState } from "react";
+import { BsChatRight } from "react-icons/bs";
+import { FiShare } from "react-icons/fi";
+import { AiOutlineRetweet, AiTwotoneHeart } from "react-icons/ai";
+import { Box, Flex, Text } from "@chakra-ui/layout";
+import {
+  Avatar,
+  IconButton,
+  Image,
+  Skeleton,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { fetcher } from "@/lib/fetcher";
+import { useTweets, useUser } from "@/lib/hooks";
 
 const renderIcon = ({ icon, color, size = 15 }) => {
   const iconTypes: { [key: string]: any } = {
     reply: <BsChatRight size={size} color={color} />,
     retweet: <AiOutlineRetweet size={size} color={color} />,
-    like: <FiHeart size={size} color={color} />,
+    like: <AiTwotoneHeart size={size} color={color} />,
     share: <FiShare size={size} color={color} />,
   };
 
   return iconTypes[icon];
 };
 
-const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
+const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   const { user } = useUser();
+  const { tweets } = useTweets();
   const [userLiked, setUserLiked] = useState<boolean>(false);
   const [userRetweeted, setUserRetweeted] = useState(false);
   const [hasActed, setHasActed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [likes, setLikes] = useState<number>(tweet?.likes?.length || 0);
+  const [retweets, setRetweets] = useState<number>(
+    tweet?.retweets?.length || 0
+  );
 
-  // eslint-disable-next-line no-unused-vars
-  const handler = async (action: "reply" | "share") => {};
+  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
 
-  const likeTweet = () => {
-    setUserLiked((prev) => !prev);
+  const tweetOperations = (operation: string) => {
+    const tweetIndex = tweets.findIndex((t) => t._id === tweet._id);
+    const actions = {
+      LIKE_TWEET: () => {
+        setUserLiked(true);
+        setLikes((prevState) => prevState + 1);
+        tweets[tweetIndex].likes += 1;
+        mutate("tweets", tweets, false);
+        fetcher(`tweets/${tweet._id}`, { action: "like" });
+      },
+      UNDO_LIKE_TWEET: async () => {
+        setUserLiked(false);
+        setLikes((prevState) => prevState - 1);
+        tweets[tweetIndex].likes -= 1;
+        mutate("tweets", tweets, false);
+        await fetcher(`tweets/${tweet._id}`, { action: "undoLike" });
+      },
+      RETWEET: () => {
+        setUserRetweeted(true);
+        setRetweets((prevState) => prevState + 1);
+        tweets[tweetIndex].retweets += 1;
+        mutate("tweets", tweets, false);
+        fetcher(`tweets/${tweet._id}`, { action: "retweet" });
+      },
+      UNDO_RETWEET: () => {
+        setUserRetweeted(false);
+        setRetweets((prevState) => prevState - 1);
+        tweets[tweetIndex].retweets -= 1;
+        mutate("tweets", tweets, false);
+        fetcher(`tweets/${tweet._id}`, { action: "undoRetweet" });
+      },
+      REPLY: () => null,
+      SHARE: () => null,
+    };
     setHasActed(true);
+    return actions[operation] ? actions[operation]() : null;
   };
 
-  const retweet = () => {
-    setUserRetweeted((prev) => !prev);
-    setHasActed(true);
-  };
-
-  const actions = ({ likes, retweets }) => [
+  const actions = [
     {
       name: "reply",
       icon: (color: string) => renderIcon({ icon: "reply", color }),
       number: null,
-      handler: () => handler("reply"),
+      handler: () => tweetOperations("REPLY"),
     },
     {
       name: "retweet",
       icon: (color: string) => renderIcon({ icon: "retweet", color }),
       number: retweets,
-      handler: retweet,
+      handler: () =>
+        tweetOperations(userRetweeted ? "UNDO_RETWEET" : "RETWEET"),
     },
     {
       name: "like",
       icon: (color: string) => renderIcon({ icon: "like", color }),
       number: likes,
-      handler: likeTweet,
+      handler: () =>
+        tweetOperations(userLiked ? "UNDO_LIKE_TWEET" : "LIKE_TWEET"),
     },
     {
       name: "share",
       icon: (color: string) => renderIcon({ icon: "share", color }),
       number: null,
-      handler: () => handler("share"),
+      handler: () => tweetOperations("SHARE"),
     },
   ];
 
   const handleStateColor = (actionName: string) => {
     const iconStateColor: { [key: string]: string } = {
-      like: userLiked ? "#fa197f;" : "#6d767c",
+      like: userLiked ? "#fa197f" : "#6d767c",
       retweet: userRetweeted ? "#00ba7c" : "#6d767c",
-    };
-
-    return iconStateColor[actionName] || "#6d767c";
-  };
-
-  const handleHoverColor = (actionName: string) => {
-    const iconStateColor: { [key: string]: string } = {
-      like: "#fa197f",
-      retweet: "#00ba7c",
     };
 
     return iconStateColor[actionName] || "#6d767c";
@@ -87,25 +118,18 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
 
   useEffect(() => {
     if (hasActed) {
+      mutate("tweets");
       setHasActed(false);
-      if (userLiked) {
-        fetcher(`tweets/${tweet.id}`, { action: "like" });
-      }
-      if (userRetweeted) {
-        fetcher(`tweets/${tweet.id}`, { action: "retweet" });
-      }
     }
-  }, [hasActed, tweet, userLiked, userRetweeted]);
+  }, [hasActed]);
 
   useEffect(() => {
-    const liked = tweet.likes.find(
-      (t: { userId: string }) => t.userId === user?.id
-    );
-    const retweeted = tweet.retweets.find(
-      (t: { userId: string }) => t.userId === user?.id
-    );
-    setUserLiked(!!liked);
-    setUserRetweeted(!!retweeted);
+    if (tweet && user) {
+      const liked = tweet?.likes?.includes(user._id);
+      const retweeted = tweet?.retweets?.includes(user._id);
+      setUserLiked(liked);
+      setUserRetweeted(retweeted);
+    }
   }, [tweet, user]);
 
   return (
@@ -116,8 +140,8 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
         },
       }}
       padding="20px"
-      borderBottom="2px solid"
-      borderColor="gray.800"
+      borderBottom="1px solid"
+      borderColor={borderColor}
     >
       <Box>
         <Flex>
@@ -151,7 +175,7 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
             <Box marginBottom="15px">
               <Text fontWeight="small">{tweet?.content}</Text>
             </Box>
-            {tweet.imageSrc.length ? (
+            {tweet?.imageSrc?.length ? (
               <Skeleton
                 startColor="gray.500"
                 endColor="gray.600"
@@ -160,8 +184,8 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
               >
                 <Box width="100%" height={imageLoaded ? "auto" : "max-content"}>
                   <Image
-                    border="2px solid"
-                    borderColor="gray.800"
+                    border="1px solid"
+                    borderColor={borderColor}
                     src={tweet.imageSrc[0]}
                     borderRadius="12px"
                     width="100%"
@@ -172,10 +196,7 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
             ) : null}
             <Box marginTop="20px" width="80%" fontSize="small">
               <Flex justifyContent="space-between" alignItems="center">
-                {actions({
-                  likes: tweet.likes.length,
-                  retweets: tweet.retweets.length,
-                }).map((action) => (
+                {actions.map((action) => (
                   <IconButton
                     aria-label="action-button"
                     variant="ghost"
@@ -188,12 +209,6 @@ const Tweet: FC<{ tweet: ITweet }> = ({ tweet }) => {
                       key={action.name}
                       alignItems="center"
                       color={handleStateColor(action.name)}
-                      sx={{
-                        "&:hover": {
-                          color: handleHoverColor(action.name),
-                          bg: `${handleHoverColor(action.name)}1A`,
-                        },
-                      }}
                     >
                       {action.icon(handleStateColor(action.name))}
                       <Box ml="5px">

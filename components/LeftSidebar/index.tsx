@@ -6,9 +6,12 @@ import { BiUser } from "react-icons/bi";
 import { FaRegEnvelope, FaBookmark } from "react-icons/fa";
 import { BsCardText } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
-import { Avatar, Button } from "@chakra-ui/react";
+import { Avatar, Button, useColorModeValue } from "@chakra-ui/react";
+import { useUser } from "@/lib/hooks";
 
 const LeftSidebar = () => {
+  const { user } = useUser();
+  const twitterSrc = useColorModeValue("/twitter-blue.png", "/twitter.png");
   const menuItems = [
     {
       name: "Home",
@@ -18,56 +21,68 @@ const LeftSidebar = () => {
     {
       name: "Explore",
       icon: <FiHash size={24} />,
-      link: "/explore",
+      link: "/home",
+      // link: "/explore",
     },
     {
       name: "Notifications",
       icon: <FiBell size={24} />,
-      link: "/notifications",
+      link: "/home",
+      // link: "/notifications",
     },
     {
       name: "Messages",
       icon: <FaRegEnvelope size={24} />,
-      link: "/messages",
+      link: "/home",
+      // link: "/messages",
     },
     {
       name: "Bookmarks",
       icon: <FaBookmark size={24} />,
-      link: "/bookmarks",
+      link: "/home",
+      // link: "/bookmarks",
     },
     {
       name: "Lists",
       icon: <BsCardText size={24} />,
-      link: "/lists",
+      link: "/home",
+      // link: "/lists",
     },
     {
       name: "Profile",
       icon: <BiUser size={24} />,
-      link: "/profile",
+      link: "/home",
+      // link: "/profile",
     },
     {
       name: "More",
       icon: <CgMoreO size={24} />,
-      link: "/more",
+      link: "/home",
+      // link: "/more",
     },
   ];
+  const hoverColor = useColorModeValue(
+    "rgba(15,20,21,0.1)",
+    "rgba(217,217,217,0.1)"
+  );
+  const btnColor = useColorModeValue("white", "black");
   return (
     <Box paddingTop="20px" height="100vh" position="relative">
       <Box marginBottom="20px">
         <Box paddingY="10px" paddingX="15px">
-          <NextImage src="/twitter.png" width={25} height={25} />
+          <NextImage src={twitterSrc} width={25} height={25} />
         </Box>
-        <Box marginTop="20px">
+        <Box marginTop="10px">
           {menuItems.map((item) => (
             <LinkBox
               key={item.name}
-              marginBottom="20px"
+              marginBottom="10px"
               paddingY="10px"
               paddingX="15px"
               width="max-content"
               sx={{
                 "&:hover": {
-                  bg: "rgba(217,217,217,0.1)",
+                  bg: hoverColor,
                   borderRadius: "24px",
                 },
               }}
@@ -97,6 +112,7 @@ const LeftSidebar = () => {
                 bg: "twitter.700",
               },
             }}
+            color={btnColor}
           >
             Tweet
           </Button>
@@ -104,10 +120,10 @@ const LeftSidebar = () => {
       </Box>
       <Box position="absolute" bottom="40px">
         <Flex alignItems="center">
-          <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+          <Avatar name="Dan Abrahmov" src={user?.avatar} />
           <Box ml="10px">
             <Text fontSize="20px" color="gray.500">
-              @username
+              @{user?.username || ""}
             </Text>
           </Box>
         </Flex>

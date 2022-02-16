@@ -1,8 +1,7 @@
 import nc from "next-connect";
-import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import onError from "../../../middleware/error";
-import { validateRoute } from "../../../lib/auth";
+import onError from "@/middleware/error";
+import { validateRoute } from "@/lib/auth";
 
 const handler = nc({
   onError,
@@ -10,9 +9,9 @@ const handler = nc({
 
 handler.get(
   validateRoute(
-    async (req: NextApiRequest, res: NextApiResponse, user: User) => {
+    async (req: NextApiRequest, res: NextApiResponse, user: any) => {
       res.status(200);
-      res.json(user);
+      res.json({ data: user });
     }
   )
 );

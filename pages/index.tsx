@@ -27,7 +27,7 @@ import SimpleBar from "simplebar-react";
 import { IoMdClose } from "react-icons/io";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { auth } from "../lib/mutations";
+import { auth } from "@/lib/mutations";
 
 type InitialValues = {
   firstname: string;
@@ -187,8 +187,10 @@ const Register = () => {
   const router = useRouter();
 
   const handleFormSubmit = async (values: InitialValues) => {
-    await auth("register", values);
-    router.push("/home");
+    const user = await auth("register", values);
+    if (user) {
+      router.push("/home");
+    }
   };
   return (
     <SimpleBar>

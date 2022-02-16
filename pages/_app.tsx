@@ -1,9 +1,13 @@
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import "reset-css";
 import "simplebar/dist/simplebar.min.css";
-import Head from "next/head";
 
-const theme = extendTheme({
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
+export const theme = extendTheme({
   components: {
     Button: {
       variants: {
@@ -16,14 +20,12 @@ const theme = extendTheme({
       },
     },
   },
+  config,
 });
 
 const MyApp = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={theme}>
-      <Head>
-        <meta name="viewport" content="width=1280, user-scalable=yes" />
-      </Head>
       <Component {...pageProps} />
     </ChakraProvider>
   );

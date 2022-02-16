@@ -15,4 +15,4 @@ export const fetcher = async (url: string, data = undefined) =>
       }
       return res.json();
     })
-    .then((res) => res);
+    .then((res) => res.data);

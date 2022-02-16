@@ -20,8 +20,8 @@ import { useRouter } from "next/router";
 import SimpleBar from "simplebar-react";
 import { SyntheticEvent, useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { isValidEmail } from "../../lib/validators";
-import { auth } from "../../lib/mutations";
+import { isValidEmail } from "@/lib/validators";
+import { auth } from "@/lib/mutations";
 
 const Login = () => {
   const [email, setEmail] = useState("alphaxsalt@gmail.com");
@@ -34,9 +34,11 @@ const Login = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await auth("login", { email, password });
+    const user = await auth("login", { email, password });
+    if (user) {
+      router.push("/home");
+    }
     setIsLoading(false);
-    router.push("/home");
   };
 
   const renderPasswordIcon = (visible: boolean) => {
@@ -48,7 +50,7 @@ const Login = () => {
   const stepOne = () => (
     <Box marginTop="20px" paddingX="30px">
       <Flex justifyContent="center" alignItems="center">
-        <Box width="80%">
+        <Box width="100%">
           <Box marginBottom="40px" marginTop="20px">
             <Text fontSize="2xl" fontWeight="extrabold">
               Sign in to Twitter
@@ -233,7 +235,7 @@ const Login = () => {
     </Box>
   );
 
-  const renderStep = (step) => {
+  const renderStep = (step: number) => {
     switch (step) {
       case 1:
         return stepOne();
@@ -250,14 +252,14 @@ const Login = () => {
         <Box height="100vh">
           <Flex height="100%" justifyContent="center" alignItems="center">
             <Box
-              minW={["80%", "80%", "50%", "35%"]}
+              minWidth={{ base: "80%", sm: "80%", md: "530px" }}
               bg="black"
               rounded="xl"
               color="white"
               padding="20px"
               position="relative"
               minHeight="40%"
-              overFlowY="auto"
+              overflowY="auto"
             >
               <Box>
                 <Box>
