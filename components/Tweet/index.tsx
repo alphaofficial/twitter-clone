@@ -5,15 +5,9 @@ import { BsChatRight } from "react-icons/bs";
 import { FiShare } from "react-icons/fi";
 import { AiOutlineRetweet, AiTwotoneHeart } from "react-icons/ai";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import {
-  Avatar,
-  IconButton,
-  Image,
-  Skeleton,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Avatar, IconButton, Image, Skeleton } from "@chakra-ui/react";
 import { fetcher } from "@/lib/fetcher";
-import { useTweets, useUser } from "@/lib/hooks";
+import { useAppTheme, useTweets, useUser } from "@/lib/hooks";
 
 const renderIcon = ({ icon, color, size = 15 }) => {
   const iconTypes: { [key: string]: any } = {
@@ -29,6 +23,7 @@ const renderIcon = ({ icon, color, size = 15 }) => {
 const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   const { user } = useUser();
   const { tweets } = useTweets();
+  const { borderColor } = useAppTheme();
   const [userLiked, setUserLiked] = useState<boolean>(false);
   const [userRetweeted, setUserRetweeted] = useState(false);
   const [hasActed, setHasActed] = useState(false);
@@ -37,8 +32,6 @@ const Tweet: FC<{ tweet: any }> = ({ tweet }) => {
   const [retweets, setRetweets] = useState<number>(
     tweet?.retweets?.length || 0
   );
-
-  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
 
   const tweetOperations = (operation: string) => {
     const tweetIndex = tweets.findIndex((t) => t._id === tweet._id);

@@ -1,17 +1,15 @@
 import { Box, Flex, Container } from "@chakra-ui/layout";
-import { useColorModeValue } from "@chakra-ui/react";
 import SimpleBar from "simplebar-react";
 import LeftSidebar from "../LeftSidebar";
 import RightSidebar from "../RightSidebar";
 import Feed from "../Feed";
+import { useAppTheme } from "@/lib/hooks";
 
 const PageLayout = ({ children }) => {
-  const bg = useColorModeValue("white", "black");
-  const color = useColorModeValue("black", "white");
-  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+  const { itemBackground, borderColor, color } = useAppTheme();
 
   return (
-    <Box bg={bg} color={color} height="100vh">
+    <Box bg={itemBackground} color={color} height="100vh">
       <Container maxW="container.xl">
         <Flex justifyContent="space-between">
           <Box width="300px">

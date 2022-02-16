@@ -1,27 +1,20 @@
 import { Box, Text, Center } from "@chakra-ui/layout";
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Spinner,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputLeftElement, Spinner } from "@chakra-ui/react";
 import { IoMdSearch } from "react-icons/io";
-import { useUsers } from "@/lib/hooks";
+import { useAppTheme, useUsers } from "@/lib/hooks";
 import UserFollowCard from "../UserFollowCard";
 
 const RightSidebar = () => {
   const { users, isLoading } = useUsers();
-  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
-  const bg = useColorModeValue("white", "rgba(0, 0, 0, 0.65)");
-  const inputBg = useColorModeValue("#f7f9f9", "rgba(22, 24, 28, 1)");
+  const { inputBackground, borderColor, itemBackground } = useAppTheme();
+
   return (
     <Box>
       <Box
         padding="20px"
         position="sticky"
         top="0"
-        bg={bg}
+        bg={itemBackground}
         backdropFilter="blur(12px)"
         width="100%"
         zIndex="1"
@@ -31,7 +24,7 @@ const RightSidebar = () => {
             <IoMdSearch size={30} />
           </InputLeftElement>
           <Input
-            bg={inputBg}
+            bg={inputBackground}
             borderColor={borderColor}
             rounded="full"
             type="text"
@@ -42,7 +35,7 @@ const RightSidebar = () => {
 
       <Box padding="20px">
         <Box
-          bg={inputBg}
+          bg={inputBackground}
           borderRadius="2xl"
           paddingY="10px"
           marginTop="20px"

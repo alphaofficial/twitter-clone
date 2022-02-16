@@ -28,6 +28,7 @@ import { IoMdClose } from "react-icons/io";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { auth } from "@/lib/mutations";
+import { useAppTheme } from "@/lib/hooks";
 
 type InitialValues = {
   firstname: string;
@@ -55,6 +56,7 @@ const FormValidation = Yup.object().shape({
     .min(6, "Password is too short - should be 6 chars minimum."),
 });
 const CreateUserForm = ({ handleFormSubmit }) => {
+  const { color, borderColor } = useAppTheme();
   return (
     <Formik
       initialValues={initialValues}
@@ -73,7 +75,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
         <form onSubmit={handleSubmit}>
           <Box>
             <Box marginTop="20px">
-              <Text fontSize="xl" fontWeight="bold">
+              <Text fontSize="xl" fontWeight="bold" color={color}>
                 Create your account
               </Text>
             </Box>
@@ -88,6 +90,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.firstname}
+                  borderColor={borderColor}
                 />
                 <FormHelperText color="red.400">
                   {errors.firstname && touched.firstname && errors.firstname}
@@ -105,6 +108,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.lastname}
+                  borderColor={borderColor}
                 />
                 <FormHelperText color="red.400">
                   {errors.lastname && touched.lastname && errors.lastname}
@@ -122,6 +126,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.username}
+                  borderColor={borderColor}
                 />
                 <FormHelperText color="red.400">
                   {errors.username && touched.username && errors.username}
@@ -137,6 +142,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
+                  borderColor={borderColor}
                 />
                 <FormHelperText color="red.400">
                   {errors.email && touched.email && errors.email}
@@ -152,6 +158,7 @@ const CreateUserForm = ({ handleFormSubmit }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
+                  borderColor={borderColor}
                 />
                 <FormHelperText color="red.400">
                   {errors.password && touched.password && errors.password}
@@ -184,6 +191,14 @@ const CreateUserForm = ({ handleFormSubmit }) => {
 
 const Register = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    pageBackground,
+    twitterSrc,
+    secondaryColor,
+    signInButtonHover,
+    modalBackground,
+    color,
+  } = useAppTheme();
   const router = useRouter();
 
   const handleFormSubmit = async (values: InitialValues) => {
@@ -210,17 +225,26 @@ const Register = () => {
             paddingTop="10%"
             paddingX="40px"
             paddingBottom="20px"
+            bg={pageBackground}
           >
             <Box>
-              <NextImage src="/twitter.png" height={35} width={35} />
+              <NextImage src={twitterSrc} height={35} width={35} />
             </Box>
             <Box marginTop="30px">
-              <Text color="gray.400" fontSize="7xl" fontWeight="extrabold">
+              <Text
+                color={secondaryColor}
+                fontSize="7xl"
+                fontWeight="extrabold"
+              >
                 Happening now
               </Text>
             </Box>
             <Box marginTop="20px">
-              <Text color="gray.400" fontWeight="extrabold" fontSize="4xl">
+              <Text
+                color={secondaryColor}
+                fontWeight="extrabold"
+                fontSize="4xl"
+              >
                 Join Twitter today.
               </Text>
             </Box>
@@ -276,7 +300,7 @@ const Register = () => {
               </Stack>
               <Box marginTop="50px">
                 <Box marginBottom="20px">
-                  <Text color="gray.400" fontSize="md" fontWeight="bold">
+                  <Text color={secondaryColor} fontSize="md" fontWeight="bold">
                     Already have an account?
                   </Text>
                 </Box>
@@ -288,7 +312,7 @@ const Register = () => {
                         width="100%"
                         sx={{
                           "&:hover": {
-                            bg: "gray.900",
+                            bg: signInButtonHover,
                           },
                         }}
                         bg="transparent"
@@ -309,8 +333,8 @@ const Register = () => {
         </Flex>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
-        <ModalOverlay bg="rgba(91, 112, 131, 0.4);" />
-        <ModalContent bg="black" color="white" paddingBottom="40px">
+        <ModalOverlay bg={modalBackground} />
+        <ModalContent bg={pageBackground} color="white" paddingBottom="40px">
           <Box position="relative">
             <Box paddingLeft="4px" paddingTop="4px">
               <IconButton
@@ -323,11 +347,11 @@ const Register = () => {
                 }}
                 onClick={onClose}
               >
-                <IoMdClose size={30} />
+                <IoMdClose size={30} color={color} />
               </IconButton>
             </Box>
             <Box position="absolute" left="48%" top="10px">
-              <Image src="/twitter.png" width={30} height={30} />
+              <Image src={twitterSrc} width={30} height={30} />
             </Box>
           </Box>
 

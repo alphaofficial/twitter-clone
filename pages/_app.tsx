@@ -3,7 +3,7 @@ import "reset-css";
 import "simplebar/dist/simplebar.min.css";
 
 const config: ThemeConfig = {
-  initialColorMode: "light",
+  initialColorMode: "system",
   useSystemColorMode: false,
 };
 

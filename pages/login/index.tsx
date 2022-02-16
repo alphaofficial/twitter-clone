@@ -22,6 +22,7 @@ import { SyntheticEvent, useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { isValidEmail } from "@/lib/validators";
 import { auth } from "@/lib/mutations";
+import { useAppTheme } from "@/lib/hooks";
 
 const Login = () => {
   const [email, setEmail] = useState("alphaxsalt@gmail.com");
@@ -30,6 +31,16 @@ const Login = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const {
+    loginModalBackground,
+    color,
+    twitterSrc,
+    pageBackground,
+    borderColor,
+    secondaryButtonBackground,
+    secondaryButtonHover,
+    secondaryButtonColor,
+  } = useAppTheme();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -52,7 +63,7 @@ const Login = () => {
       <Flex justifyContent="center" alignItems="center">
         <Box width="100%">
           <Box marginBottom="40px" marginTop="20px">
-            <Text fontSize="2xl" fontWeight="extrabold">
+            <Text color={color} fontSize="2xl" fontWeight="extrabold">
               Sign in to Twitter
             </Text>
           </Box>
@@ -85,7 +96,9 @@ const Login = () => {
             </Button>
           </Stack>
           <Box marginY="20px">
-            <Text textAlign="center">or</Text>
+            <Text textAlign="center" color={color}>
+              or
+            </Text>
           </Box>
           <Box>
             <Input
@@ -95,19 +108,21 @@ const Login = () => {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               isInvalid={!isValidEmail(email)}
+              borderColor={borderColor}
+              color={color}
             />
             <Box marginTop="20px">
               <Button
                 width="100%"
-                bg="gray.100"
+                bg={secondaryButtonBackground}
                 sx={{
                   "&:hover": {
-                    bg: "gray.300",
+                    bg: secondaryButtonHover,
                   },
                 }}
                 rounded="full"
                 fontWeight="bold"
-                color="black"
+                color={secondaryButtonColor}
                 disabled={email.length === 0 || !isValidEmail(email)}
                 onClick={() => {
                   setCurrentStep(2);
@@ -125,14 +140,14 @@ const Login = () => {
                       width="100%"
                       sx={{
                         "&:hover": {
-                          bg: "gray.900",
+                          bg: secondaryButtonColor,
                         },
                       }}
                       bg="transparent"
                       border="1px solid"
-                      borderColor="gray.700"
+                      borderColor={borderColor}
                       rounded="full"
-                      color="white"
+                      color={color}
                       fontWeight="bold"
                     >
                       Forgot password?
@@ -152,7 +167,7 @@ const Login = () => {
       <Flex alignItems="center">
         <Box width="100%" paddingX="20px">
           <Box marginBottom="40px" marginTop="20px">
-            <Text fontSize="2xl" fontWeight="extrabold">
+            <Text fontSize="2xl" fontWeight="extrabold" color={color}>
               Enter your password
             </Text>
           </Box>
@@ -165,6 +180,8 @@ const Login = () => {
                   size="lg"
                   value={email}
                   isDisabled
+                  color={color}
+                  borderColor={borderColor}
                 />
               </Box>
               <Box marginTop="20px">
@@ -174,6 +191,8 @@ const Login = () => {
                     placeholder="password"
                     size="lg"
                     value={password}
+                    borderColor={borderColor}
+                    color={color}
                     onChange={(event) => setPassword(event.target.value)}
                   />
                   <InputRightElement>
@@ -185,6 +204,7 @@ const Login = () => {
                           bg: "transparent",
                         },
                       }}
+                      color={color}
                       onClick={() => setShowPassword((prevState) => !prevState)}
                     >
                       {renderPasswordIcon(showPassword)}
@@ -197,15 +217,15 @@ const Login = () => {
               <Button
                 type="submit"
                 width="100%"
-                bg="gray.100"
+                bg={secondaryButtonBackground}
                 sx={{
                   "&:hover": {
-                    bg: "gray.300",
+                    bg: secondaryButtonHover,
                   },
                 }}
                 rounded="full"
                 fontWeight="bold"
-                color="black"
+                color={secondaryButtonColor}
                 disabled={password.length === 0}
                 onClick={() => {
                   setCurrentStep(2);
@@ -216,7 +236,9 @@ const Login = () => {
               </Button>
               <Box marginTop="20px">
                 <Flex alignItems="center">
-                  <Text fontSize="small">Don&apos;t have an account? </Text>
+                  <Text fontSize="small" color={color}>
+                    Don&apos;t have an account?{" "}
+                  </Text>
                   <LinkBox>
                     <NextLink href="/" passHref>
                       <LinkOverlay>
@@ -247,13 +269,13 @@ const Login = () => {
   };
 
   return (
-    <Box width="100vw" minHeight="100vh" bg="gray.700">
+    <Box width="100vw" minHeight="100vh" bg={loginModalBackground}>
       <SimpleBar>
         <Box height="100vh">
           <Flex height="100%" justifyContent="center" alignItems="center">
             <Box
               minWidth={{ base: "80%", sm: "80%", md: "530px" }}
-              bg="black"
+              bg={pageBackground}
               rounded="xl"
               color="white"
               padding="20px"
@@ -266,13 +288,13 @@ const Login = () => {
                   <LinkBox>
                     <NextLink href="/" passHref>
                       <LinkOverlay>
-                        <IoMdClose size={20} color="white" />
+                        <IoMdClose size={20} color={color} />
                       </LinkOverlay>
                     </NextLink>
                   </LinkBox>
                 </Box>
                 <Box position="absolute" left="48%" top="18px">
-                  <Image src="/twitter.png" width={30} height={30} />
+                  <Image src={twitterSrc} width={30} height={30} />
                 </Box>
                 <form onSubmit={handleSubmit}>{renderStep(currentStep)}</form>
               </Box>
