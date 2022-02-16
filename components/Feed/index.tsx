@@ -7,22 +7,21 @@ import {
   IconButton,
   Skeleton,
   Textarea,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { VscSmiley } from "react-icons/vsc";
 import { fetcher } from "@/lib/fetcher";
-import { useUser } from "@/lib/hooks";
+import { useAppTheme, useUser } from "@/lib/hooks";
 
 const totalCount = 280;
 
 const Feed = ({ children }) => {
-  // const { tweets } = useTweets();
+  const { borderColor, itemBackground } = useAppTheme();
   const { user, isLoading, isError } = useUser();
   const [content, setContent] = useState("");
 
-  const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
-  const bg = useColorModeValue("white", "rgba(0, 0, 0, 0.65)");
+  // const borderColor = useColorModeValue("rgb(239, 243, 244)", "gray.800");
+  // const bg = useColorModeValue("white", "rgba(0, 0, 0, 0.65)");
 
   const handleTweet = async () => {
     const tweet = {
@@ -43,7 +42,7 @@ const Feed = ({ children }) => {
         padding="20px"
         position="sticky"
         top="0"
-        bg={bg}
+        bg={itemBackground}
         backdropFilter="blur(12px)"
         width="100%"
         zIndex="1"

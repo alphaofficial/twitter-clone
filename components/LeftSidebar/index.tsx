@@ -6,12 +6,12 @@ import { BiUser } from "react-icons/bi";
 import { FaRegEnvelope, FaBookmark } from "react-icons/fa";
 import { BsCardText } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
-import { Avatar, Button, useColorModeValue } from "@chakra-ui/react";
-import { useUser } from "@/lib/hooks";
+import { Avatar, Button } from "@chakra-ui/react";
+import { useAppTheme, useUser } from "@/lib/hooks";
 
 const LeftSidebar = () => {
   const { user } = useUser();
-  const twitterSrc = useColorModeValue("/twitter-blue.png", "/twitter.png");
+  const { twitterSrc, menuHoverColor } = useAppTheme();
   const menuItems = [
     {
       name: "Home",
@@ -61,11 +61,7 @@ const LeftSidebar = () => {
       // link: "/more",
     },
   ];
-  const hoverColor = useColorModeValue(
-    "rgba(15,20,21,0.1)",
-    "rgba(217,217,217,0.1)"
-  );
-  const btnColor = useColorModeValue("white", "black");
+
   return (
     <Box paddingTop="20px" height="100vh" position="relative">
       <Box marginBottom="20px">
@@ -82,7 +78,7 @@ const LeftSidebar = () => {
               width="max-content"
               sx={{
                 "&:hover": {
-                  bg: hoverColor,
+                  bg: menuHoverColor,
                   borderRadius: "24px",
                 },
               }}
@@ -112,7 +108,7 @@ const LeftSidebar = () => {
                 bg: "twitter.700",
               },
             }}
-            color={btnColor}
+            color="white"
           >
             Tweet
           </Button>
