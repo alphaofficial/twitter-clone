@@ -10,7 +10,6 @@ const handler = nc({
 handler.get(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
-      console.log({ user });
       res.status(200);
       res.json({ data: user });
     }

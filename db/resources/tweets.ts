@@ -8,7 +8,11 @@ export const getTweet = async (tweetId: string) => {
 
 export const getTweets = async () => {
   const { db } = await connectToDB();
-  const tweets = await db.collection("tweets").find({}).toArray();
+  const tweets = await db
+    .collection("tweets")
+    .find({})
+    .sort({ _id: -1 })
+    .toArray();
   return tweets;
 };
 

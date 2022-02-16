@@ -187,8 +187,10 @@ const Register = () => {
   const router = useRouter();
 
   const handleFormSubmit = async (values: InitialValues) => {
-    await auth("register", values);
-    router.push("/home");
+    const user = await auth("register", values);
+    if (user) {
+      router.push("/home");
+    }
   };
   return (
     <SimpleBar>

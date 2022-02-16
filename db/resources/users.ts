@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { nanoid } from "nanoid";
 import { connectToDB } from "../connect";
 
 export const getUser = async ({ email }) => {
@@ -38,10 +39,13 @@ export const createUser = async (user: any) => {
   const { password, ...rest } = user;
   const salt = bcrypt.genSaltSync();
 
-  await db.collection("users").insertOne({
+  const operation = await db.collection("users").insertOne({
+    _id: nanoid(12),
     ...rest,
     password: bcrypt.hashSync(password, salt),
     createdAt: new Date().toDateString(),
     updatedAt: new Date().toDateString(),
   });
+
+  return operation;
 };

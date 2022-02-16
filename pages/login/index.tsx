@@ -34,9 +34,11 @@ const Login = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await auth("login", { email, password });
+    const user = await auth("login", { email, password });
+    if (user) {
+      router.push("/home");
+    }
     setIsLoading(false);
-    router.push("/home");
   };
 
   const renderPasswordIcon = (visible: boolean) => {
@@ -48,7 +50,7 @@ const Login = () => {
   const stepOne = () => (
     <Box marginTop="20px" paddingX="30px">
       <Flex justifyContent="center" alignItems="center">
-        <Box width={{ base: "80%", sm: "80%", md: "443px" }}>
+        <Box width="100%">
           <Box marginBottom="40px" marginTop="20px">
             <Text fontSize="2xl" fontWeight="extrabold">
               Sign in to Twitter
@@ -148,7 +150,7 @@ const Login = () => {
   const stepTwo = () => (
     <Box marginTop="20px" paddingX="30px">
       <Flex alignItems="center">
-        <Box width={{ base: "80%", sm: "80%", md: "443px" }} paddingX="20px">
+        <Box width="100%" paddingX="20px">
           <Box marginBottom="40px" marginTop="20px">
             <Text fontSize="2xl" fontWeight="extrabold">
               Enter your password
@@ -250,7 +252,7 @@ const Login = () => {
         <Box height="100vh">
           <Flex height="100%" justifyContent="center" alignItems="center">
             <Box
-              minW={["80%", "80%", "50%", "35%"]}
+              minWidth={{ base: "80%", sm: "80%", md: "530px" }}
               bg="black"
               rounded="xl"
               color="white"

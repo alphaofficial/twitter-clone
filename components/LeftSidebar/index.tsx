@@ -21,37 +21,44 @@ const LeftSidebar = () => {
     {
       name: "Explore",
       icon: <FiHash size={24} />,
-      link: "/explore",
+      link: "/home",
+      // link: "/explore",
     },
     {
       name: "Notifications",
       icon: <FiBell size={24} />,
-      link: "/notifications",
+      link: "/home",
+      // link: "/notifications",
     },
     {
       name: "Messages",
       icon: <FaRegEnvelope size={24} />,
-      link: "/messages",
+      link: "/home",
+      // link: "/messages",
     },
     {
       name: "Bookmarks",
       icon: <FaBookmark size={24} />,
-      link: "/bookmarks",
+      link: "/home",
+      // link: "/bookmarks",
     },
     {
       name: "Lists",
       icon: <BsCardText size={24} />,
-      link: "/lists",
+      link: "/home",
+      // link: "/lists",
     },
     {
       name: "Profile",
       icon: <BiUser size={24} />,
-      link: "/profile",
+      link: "/home",
+      // link: "/profile",
     },
     {
       name: "More",
       icon: <CgMoreO size={24} />,
-      link: "/more",
+      link: "/home",
+      // link: "/more",
     },
   ];
   const hoverColor = useColorModeValue(
@@ -65,11 +72,11 @@ const LeftSidebar = () => {
         <Box paddingY="10px" paddingX="15px">
           <NextImage src={twitterSrc} width={25} height={25} />
         </Box>
-        <Box marginTop="20px">
+        <Box marginTop="10px">
           {menuItems.map((item) => (
             <LinkBox
               key={item.name}
-              marginBottom="15px"
+              marginBottom="10px"
               paddingY="10px"
               paddingX="15px"
               width="max-content"
@@ -113,7 +120,7 @@ const LeftSidebar = () => {
       </Box>
       <Box position="absolute" bottom="40px">
         <Flex alignItems="center">
-          <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+          <Avatar name="Dan Abrahmov" src={user?.avatar} />
           <Box ml="10px">
             <Text fontSize="20px" color="gray.500">
               @{user?.username || ""}

@@ -14,36 +14,6 @@ if (!DATABASE_NAME) {
 global.mongo = global.mongo || {};
 
 export async function connectToDB() {
-  // check the cached.
-  // if (cachedClient && cachedDb) {
-  //   // load from cache
-  //   return {
-  //     dbClient: cachedClient,
-  //     db: cachedDb,
-  //   };
-  // }
-  // // set the connection options
-  // const opts = {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  //   connectTimeoutMS: 10000,
-  // };
-
-  // // Connect to cluster
-  // const client = new MongoClient(DATABASE_URL as string, opts);
-  // await client.connect();
-  // const db = client.db(DATABASE_NAME);
-  // console.log("connected to database");
-  // // set cache
-  // cachedClient = client;
-  // cachedDb = db;
-  // console.log("cached connection instance");
-
-  // return {
-  //   dbClient: cachedClient,
-  //   db: cachedDb,
-  // };
-
   const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,

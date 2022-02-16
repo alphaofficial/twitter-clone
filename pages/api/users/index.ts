@@ -12,7 +12,6 @@ const handler = nc({
 handler.get(
   validateRoute(
     async (req: NextApiRequest, res: NextApiResponse, user: any) => {
-      console.log({ user });
       let users = [];
       try {
         users = await getOtherUsers(user._id);

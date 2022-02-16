@@ -30,6 +30,7 @@ async function seedDB() {
         firstname: "Albert",
         lastname: "King",
         username: "alphaxsalt",
+        avatar: "https://i.pravatar.cc/300",
         email: "alphaxsalt@gmail.com",
         password: bcrypt.hashSync("password", salt),
       })
